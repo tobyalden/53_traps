@@ -4,13 +4,10 @@
   <walls>
     <rect x="0" y="0" w="180" h="4"/>
     <rect x="0" y="4" w="4" h="176"/>
-    <rect x="4" y="176" w="176" h="4"/>
-    <rect x="176" y="4" w="4" h="172"/>
+    <rect x="4" y="140" w="176" h="40"/>
+    <rect x="176" y="4" w="4" h="136"/>
   </walls>
   <objects>
-    <player x="52" y="164"/>
-    <spike_floor x="84" y="172" width="16"/>
-    <checkpoint x="20" y="160"/>
-    <endtrigger x="156" y="160" width="16" height="16"/>
+    <player x="92" y="80"/>
   </objects>
 </level>

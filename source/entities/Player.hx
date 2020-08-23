@@ -11,21 +11,21 @@ import scenes.*;
 
 class Player extends MiniEntity
 {
-    public static inline var RUN_ACCEL = 450;
+    public static inline var RUN_ACCEL = 99999;
     public static inline var RUN_ACCEL_TURN_MULTIPLIER = 2;
     public static inline var RUN_DECEL = RUN_ACCEL * RUN_ACCEL_TURN_MULTIPLIER;
-    public static inline var AIR_ACCEL = 500;
-    public static inline var AIR_DECEL = 460;
+    public static inline var AIR_ACCEL = 250;
+    public static inline var AIR_DECEL = AIR_ACCEL;
     public static inline var MAX_RUN_SPEED = 120;
-    public static inline var MAX_AIR_SPEED = 160;
-    public static inline var GRAVITY = 500;
+    public static inline var MAX_AIR_SPEED = 130;
+    public static inline var GRAVITY = 800;
     public static inline var GRAVITY_ON_WALL = 150;
-    public static inline var JUMP_POWER = 160;
-    public static inline var JUMP_CANCEL_POWER = 40;
-    public static inline var WALL_JUMP_POWER_X = 130 / 1.15;
-    public static inline var WALL_JUMP_POWER_Y = 130 / 1.15;
+    public static inline var JUMP_POWER = 250;
+    public static inline var JUMP_CANCEL_POWER = JUMP_POWER;
+    public static inline var WALL_JUMP_POWER_X = 130 / 1.1;
+    public static inline var WALL_JUMP_POWER_Y = 130 / 1.1;
     public static inline var WALL_STICKINESS = 60;
-    public static inline var MAX_FALL_SPEED = 270;
+    public static inline var MAX_FALL_SPEED = 999;
     public static inline var MAX_FALL_SPEED_ON_WALL = 200;
 
     public static var sfx:Map<String, Sfx> = null;
@@ -39,16 +39,18 @@ class Player extends MiniEntity
         super(x, y);
         name = "player";
         layer = -3;
-        sprite = new Spritemap("graphics/player.png", 8, 12);
+        var scaleFactor = 2;
+        sprite = new Spritemap(
+            "graphics/player.png", 8 * scaleFactor, 12 * scaleFactor
+        );
         sprite.add("idle", [0]);
         sprite.add("run", [1, 2, 3, 2], 8);
         sprite.add("jump", [4]);
         sprite.add("wall", [5]);
         sprite.add("skid", [6]);
         sprite.play("idle");
-        mask = new Hitbox(6, 12);
+        mask = new Hitbox(6 * scaleFactor, 12 * scaleFactor);
         sprite.x = -1;
-        sprite.flipX = true;
         graphic = sprite;
         velocity = new Vector2();
         isDead = false;
