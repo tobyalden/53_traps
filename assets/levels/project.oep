@@ -1,0 +1,25 @@
+<project> 
+	<name>Unfold</name>
+	<settings> 
+		<defaultWidth>180</defaultWidth>
+		<defaultHeight>180</defaultHeight>
+		<maxWidth>1800</maxWidth>
+		<maxHeight>1800</maxHeight>
+		<workingDirectory>../graphics</workingDirectory>
+	</settings> 
+	<layers> 
+		<grid name="walls" gridSize="4" exportAsObjects="true"/>
+		<objects name="objects" gridSize="4"/>
+		<grid name="guide" gridSize="180" exportAsObjects="true" color="#AA98FB98"/>
+	</layers> 
+	<objects>
+		<object name="player" image="player_icon.png" width="8" height="12" limit="1"/>
+		<object name="spike_floor" image="spike_floor.png" width="4" height="4" resizableX="true" tile="true"/>
+		<object name="spike_ceiling" image="spike_ceiling.png" width="4" height="4" resizableX="true" tile="true"/>
+		<object name="spike_leftwall" image="spike_leftwall.png" width="4" height="4" resizableY="true" tile="true"/>
+		<object name="spike_rightwall" image="spike_rightwall.png" width="4" height="4" resizableY="true" tile="true"/>
+		<object name="checkpoint" image="checkpoint_icon.png" width="8" height="16" />
+		<object name="endtrigger" image="endtrigger.png" width="16" height="16" resizableX="true" resizableY="true"/>
+	</objects>
+</project>
+
