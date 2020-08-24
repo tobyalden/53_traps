@@ -185,7 +185,10 @@ class Player extends MiniEntity
         }
         else if(isOnWall()) {
             var gravity = velocity.y > 0 ? GRAVITY_ON_WALL : GRAVITY;
-            if(Main.inputCheck("up") && velocity.y >= -MAX_WALL_CLIMB_SPEED) {
+            if(!sword.canAttack()) {
+                velocity.y = Math.max(0, velocity.y);
+            }
+            else if(Main.inputCheck("up") && velocity.y >= -MAX_WALL_CLIMB_SPEED) {
                 velocity.y -= WALL_CLIMB_ACCEL * HXP.elapsed;
                 velocity.y = MathUtil.clamp(
                     velocity.y, -MAX_WALL_CLIMB_SPEED, 0
@@ -253,11 +256,13 @@ class Player extends MiniEntity
     }
 
     private function animation() {
-        if(Input.check("left")) {
-            sprite.flipX = true;
-        }
-        else if(Input.check("right")) {
-            sprite.flipX = false;
+        if(!wallJumpCooldown.active && sword.canAttack()) {
+            if(Input.check("left")) {
+                sprite.flipX = true;
+            }
+            else if(Input.check("right")) {
+                sprite.flipX = false;
+            }
         }
 
         if(!canMove) {

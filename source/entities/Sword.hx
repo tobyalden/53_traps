@@ -12,10 +12,10 @@ class Sword extends MiniEntity
 {
     public static inline var ATTACK_COOLDOWN = 0.1;
 
+    private var isAttacking:Bool;
     private var sprite:Image;
     private var player:Player;
     private var hitbox:Hitbox;
-    private var isAttacking:Bool;
     private var attackCooldown:Alarm;
 
     public function new(player:Player) {
@@ -31,8 +31,12 @@ class Sword extends MiniEntity
         addTween(attackCooldown);
     }
 
+    public function canAttack() {
+         return !isAttacking && !attackCooldown.active;
+    }
+
     public function attack() {
-        if(isAttacking || attackCooldown.active) {
+        if(!canAttack()) {
             return;
         }
         isAttacking = true;
