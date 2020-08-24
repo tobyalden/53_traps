@@ -11,17 +11,19 @@ import scenes.*;
 
 class Player extends MiniEntity
 {
-    public static inline var RUN_ACCEL = 99999;
+    public static inline var RUN_ACCEL = 2500;
     public static inline var RUN_ACCEL_TURN_MULTIPLIER = 2;
     public static inline var RUN_DECEL = RUN_ACCEL * RUN_ACCEL_TURN_MULTIPLIER;
-    public static inline var AIR_ACCEL = 250;
+    //public static inline var AIR_ACCEL = 250;
+    //public static inline var AIR_ACCEL = 0;
+    public static inline var AIR_ACCEL = 2000;
     public static inline var AIR_DECEL = AIR_ACCEL;
     public static inline var MAX_RUN_SPEED = 120;
     public static inline var MAX_AIR_SPEED = 130;
     public static inline var GRAVITY = 800;
     public static inline var GRAVITY_ON_WALL = 150;
     public static inline var JUMP_POWER = 250;
-    public static inline var JUMP_CANCEL_POWER = JUMP_POWER;
+    public static inline var JUMP_CANCEL_POWER = 250 / 5;
     public static inline var WALL_JUMP_POWER_X = 130 / 1.1;
     public static inline var WALL_JUMP_POWER_Y = 130 / 1.1;
     public static inline var WALL_STICKINESS = 60;
@@ -30,13 +32,15 @@ class Player extends MiniEntity
 
     public static var sfx:Map<String, Sfx> = null;
 
-    private var sprite:Spritemap;
+    public var sword(default, null):Sword;
+    public var sprite(default, null):Spritemap;
     private var velocity:Vector2;
     private var isDead:Bool;
     private var canMove:Bool;
 
     public function new(x:Float, y:Float) {
         super(x, y);
+        this.sword = new Sword(this);
         name = "player";
         layer = -3;
         var scaleFactor = 2;
@@ -66,7 +70,8 @@ class Player extends MiniEntity
                 "run" => new Sfx("audio/run.wav"),
                 "skid" => new Sfx("audio/skid.wav"),
                 "die" => new Sfx("audio/die.wav"),
-                "save" => new Sfx("audio/save.wav")
+                "save" => new Sfx("audio/save.wav"),
+                "attack" => new Sfx("audio/attack.wav")
             ];
         }
     }
@@ -75,6 +80,7 @@ class Player extends MiniEntity
         if(!isDead) {
             if(canMove) {
                 movement();
+                combat();
             }
             animation();
             if(canMove) {
@@ -182,6 +188,12 @@ class Player extends MiniEntity
         }
 
         moveBy(velocity.x * HXP.elapsed, velocity.y * HXP.elapsed, "walls");
+    }
+
+    private function combat() {
+        if(Main.inputPressed("attack")) {
+            sword.attack();
+        }
     }
 
     override public function moveCollideX(_:Entity) {

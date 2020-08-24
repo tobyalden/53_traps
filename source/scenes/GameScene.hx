@@ -34,6 +34,7 @@ class GameScene extends Scene
             add(entity);
             if(entity.name == "player") {
                 player = cast(entity, Player);
+                add(player.sword);
                 if(currentCheckpoint == null) {
                     currentCheckpoint = new Vector2(player.x, player.y);
                 }

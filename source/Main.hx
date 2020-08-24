@@ -14,7 +14,7 @@ class Main extends Engine
     private static var lastVerticalAxis:Float;
     private static var lastHorizontalAxis:Float;
     private static var previousJumpHeld:Bool = false;
-    private static var previousRestartHeld:Bool = false;
+    private static var previousAttackHeld:Bool = false;
 
     static function main() {
         new Main();
@@ -28,12 +28,12 @@ class Main extends Engine
         Key.define("right", [Key.D, Key.RIGHT, Key.RIGHT_SQUARE_BRACKET]);
         Key.define("down", [Key.S, Key.DOWN]);
         Key.define("jump", [Key.SPACE, Key.Z]);
-        Key.define("restart", [Key.R]);
+        Key.define("attack", [Key.X]);
 
         //HXP.fullscreen = true;
         //HXP.screen.scaleMode = new UniformScaleMode(UniformScaleType.Expand);
 
-        HXP.scene = new MainMenu();
+        HXP.scene = new GameScene();
         gamepad = Gamepad.gamepad(0);
         Gamepad.onConnect.bind(function(newGamepad:Gamepad) {
             if(gamepad == null) {
@@ -51,7 +51,7 @@ class Main extends Engine
         super.update();
         if(gamepad != null) {
             previousJumpHeld = gamepad.check(XboxGamepad.A_BUTTON);
-            previousRestartHeld = gamepad.check(XboxGamepad.Y_BUTTON);
+            previousAttackHeld = gamepad.check(XboxGamepad.Y_BUTTON);
         }
         lastVerticalAxis = gamepad != null ? gamepad.getAxis(1) : 0;
         lastHorizontalAxis = gamepad != null ? gamepad.getAxis(0) : 0;
@@ -66,8 +66,8 @@ class Main extends Engine
                 return true;
             }
         }
-        if(inputName == "restart") {
-            if(!previousRestartHeld && gamepad.check(XboxGamepad.Y_BUTTON)) {
+        if(inputName == "attack") {
+            if(!previousAttackHeld && gamepad.check(XboxGamepad.Y_BUTTON)) {
                 return true;
             }
         }
@@ -111,8 +111,8 @@ class Main extends Engine
                 return true;
             }
         }
-        if(inputName == "restart") {
-            if(previousRestartHeld && !gamepad.check(XboxGamepad.Y_BUTTON)) {
+        if(inputName == "attack") {
+            if(previousAttackHeld && !gamepad.check(XboxGamepad.Y_BUTTON)) {
                 return true;
             }
         }
@@ -126,8 +126,8 @@ class Main extends Engine
         if(inputName == "jump") {
             return gamepad.check(XboxGamepad.A_BUTTON);
         }
-        if(inputName == "restart") {
-            return gamepad.check(XboxGamepad.Y_BUTTON);
+        if(inputName == "attack") {
+            return gamepad.check(XboxGamepad.X_BUTTON);
         }
         if(inputName == "left") {
             return (
