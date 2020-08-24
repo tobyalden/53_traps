@@ -26,6 +26,8 @@ class GameScene extends Scene
     private var player:Player;
 
     override public function begin() {
+        addGraphic(new Image("graphics/background.png"), 99);
+
         curtain = add(new Curtain());
         curtain.fadeOut(1);
 
