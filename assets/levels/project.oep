@@ -14,6 +14,7 @@
 	</layers> 
 	<objects>
 		<object name="player" image="player_icon.png" width="16" height="24" limit="1"/>
+		<object name="enemy" image="enemy_icon.png" width="24" height="24"/>
 		<object name="spike_floor" image="spike_floor.png" width="4" height="4" resizableX="true" tile="true"/>
 		<object name="spike_ceiling" image="spike_ceiling.png" width="4" height="4" resizableX="true" tile="true"/>
 		<object name="spike_leftwall" image="spike_leftwall.png" width="4" height="4" resizableY="true" tile="true"/>

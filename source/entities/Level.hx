@@ -53,6 +53,12 @@ class Level extends Entity
                 );
                 entities.push(player);
             }
+            for(e in fastXml.node.objects.nodes.enemy) {
+                var enemy = new Bat(
+                    Std.parseInt(e.att.x), Std.parseInt(e.att.y)
+                );
+                entities.push(enemy);
+            }
             for(e in fastXml.node.objects.nodes.spike_floor) {
                 var spike = new Spike(
                     Std.parseInt(e.att.x), Std.parseInt(e.att.y),

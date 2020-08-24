@@ -9,5 +9,6 @@
   </walls>
   <objects>
     <player x="12" y="152"/>
+    <enemy x="148" y="8"/>
   </objects>
 </level>

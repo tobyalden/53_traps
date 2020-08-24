@@ -31,4 +31,8 @@ class MiniEntity extends Entity
     private function isOnLeftWall() {
         return collide("walls", x - 1, y) != null;
     }
+
+    private function getHeadingTowards(e:Entity) {
+        return new Vector2(e.centerX - centerX, e.centerY - centerY);
+    }
 }
