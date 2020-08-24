@@ -54,10 +54,11 @@ class Player extends MiniEntity
         sprite.add("run", [1, 2, 3, 2], 8);
         sprite.add("jump", [4]);
         sprite.add("wall", [5]);
+        sprite.add("climb", [5, 7], 4);
         sprite.add("skid", [6]);
         sprite.play("idle");
         mask = new Hitbox(6 * scaleFactor, 12 * scaleFactor);
-        sprite.x = -1;
+        sprite.x = -1 * scaleFactor;
         graphic = sprite;
         velocity = new Vector2();
         isDead = false;
@@ -275,7 +276,12 @@ class Player extends MiniEntity
         }
         else if(!isOnGround()) {
             if(isOnWall()) {
-                sprite.play("wall");
+                if(velocity.y < 0) {
+                    sprite.play("climb");
+                }
+                else {
+                    sprite.play("wall");
+                }
                 sprite.flipX = isOnLeftWall();
             }
             else {
