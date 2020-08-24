@@ -5,13 +5,10 @@
     <rect x="0" y="0" w="180" h="4"/>
     <rect x="0" y="4" w="4" h="176"/>
     <rect x="4" y="176" w="176" h="4"/>
-    <rect x="176" y="4" w="4" h="172"/>
+    <rect x="76" y="60" w="104" h="116"/>
+    <rect x="176" y="4" w="4" h="56"/>
   </walls>
   <objects>
     <player x="12" y="152"/>
-    <enemy x="148" y="8"/>
-    <enemy x="8" y="8"/>
-    <enemy x="52" y="8"/>
-    <enemy x="104" y="8"/>
   </objects>
 </level>

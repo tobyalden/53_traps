@@ -197,9 +197,7 @@ class Player extends MiniEntity
             }
             else if(Main.inputCheck("down")) {
                 velocity.y += WALL_DESCEND_ACCEL * HXP.elapsed;
-                velocity.y = MathUtil.clamp(
-                    velocity.y, 0, MAX_WALL_DESCEND_SPEED
-                );
+                velocity.y = Math.min(velocity.y, MAX_WALL_DESCEND_SPEED);
             }
             else {
                 velocity.y += gravity * HXP.elapsed;
