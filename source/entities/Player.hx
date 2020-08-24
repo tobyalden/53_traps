@@ -24,12 +24,12 @@ class Player extends MiniEntity
     public static inline var JUMP_CANCEL_POWER = JUMP_POWER / 2;
     public static inline var WALL_JUMP_POWER_X = 140;
     public static inline var WALL_JUMP_POWER_Y = 160;
-    public static inline var WALL_STICKINESS = 500;
+    public static inline var WALL_STICKINESS = 1000;
     public static inline var MAX_FALL_SPEED = 1000;
     public static inline var MAX_FALL_SPEED_ON_WALL = 0;
     public static inline var WALL_CLIMB_ACCEL = 500;
     public static inline var WALL_DESCEND_ACCEL = 1000;
-    public static inline var MAX_WALL_CLIMB_SPEED = 100;
+    public static inline var MAX_WALL_CLIMB_SPEED = 75;
     public static inline var MAX_WALL_DESCEND_SPEED = 200;
 
     public static var sfx:Map<String, Sfx> = null;
@@ -182,7 +182,7 @@ class Player extends MiniEntity
         }
         else if(isOnWall()) {
             var gravity = velocity.y > 0 ? GRAVITY_ON_WALL : GRAVITY;
-            if(Main.inputCheck("up")) {
+            if(Main.inputCheck("up") && velocity.y >= -MAX_WALL_CLIMB_SPEED) {
                 velocity.y -= WALL_CLIMB_ACCEL * HXP.elapsed;
                 velocity.y = MathUtil.clamp(
                     velocity.y, -MAX_WALL_CLIMB_SPEED, 0
@@ -230,9 +230,15 @@ class Player extends MiniEntity
             velocity.x = 0;
         }
         else if(isOnLeftWall()) {
+            if(!Input.check("right")) {
+                velocity.x = -WALL_STICKINESS;
+            }
             velocity.x = Math.max(velocity.x, -WALL_STICKINESS);
         }
         else if(isOnRightWall()) {
+            if(!Input.check("left")) {
+                velocity.x = WALL_STICKINESS;
+            }
             velocity.x = Math.min(velocity.x, WALL_STICKINESS);
         }
         return true;
