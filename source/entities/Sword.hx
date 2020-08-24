@@ -10,10 +10,13 @@ import scenes.*;
 
 class Sword extends MiniEntity
 {
+    public static inline var ATTACK_COOLDOWN = 0.1;
+
     private var sprite:Image;
     private var player:Player;
     private var hitbox:Hitbox;
     private var isAttacking:Bool;
+    private var attackCooldown:Alarm;
 
     public function new(player:Player) {
         super(0, 0);
@@ -24,16 +27,19 @@ class Sword extends MiniEntity
         sprite = new Image("graphics/sword.png");
         graphic = sprite;
         isAttacking = false;
+        attackCooldown = new Alarm(ATTACK_COOLDOWN);
+        addTween(attackCooldown);
     }
 
     public function attack() {
-        if(isAttacking) {
+        if(isAttacking || attackCooldown.active) {
             return;
         }
         isAttacking = true;
         Player.sfx["attack"].play();
         HXP.alarm(0.2, function() {
             isAttacking = false;
+            attackCooldown.start();
         });
     }
 
