@@ -20,7 +20,7 @@ class Bat extends MiniEntity
 
     public function new(x:Float, y:Float) {
         super(x, y);
-        type = "hazard";
+        type = "enemy";
         hitbox = new Hitbox(18, 15);
         mask = hitbox;
         sprite = new Spritemap("graphics/bat.png", 24, 24);
@@ -44,11 +44,23 @@ class Bat extends MiniEntity
         });
     }
 
+    public function die() {
+        scene.remove(this);
+        explode(25);
+        Player.sfx["die"].play(0.5);
+    }
+
     override public function update() {
+        if(collide("sword", x, y) != null) {
+            die();
+        }
         var player = scene.getInstance("player");
         velocity = getHeadingTowards(player);
         velocity.normalize(SPEED);
-        moveBy(velocity.x * HXP.elapsed, velocity.y * HXP.elapsed, "walls");
+        moveBy(
+            velocity.x * HXP.elapsed, velocity.y * HXP.elapsed,
+            ["walls", "enemy"]
+        );
         super.update();
     }
 }
