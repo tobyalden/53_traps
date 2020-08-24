@@ -24,9 +24,10 @@ class Main extends Engine
 #if debug
         Console.enable();
 #end
-        Key.define("left", [Key.A, Key.LEFT, Key.LEFT_SQUARE_BRACKET]);
-        Key.define("right", [Key.D, Key.RIGHT, Key.RIGHT_SQUARE_BRACKET]);
-        Key.define("down", [Key.S, Key.DOWN]);
+        Key.define("left", [Key.J, Key.A, Key.LEFT, Key.LEFT_SQUARE_BRACKET]);
+        Key.define("right", [Key.L, Key.D, Key.RIGHT, Key.RIGHT_SQUARE_BRACKET]);
+        Key.define("up", [Key.I, Key.W, Key.UP]);
+        Key.define("down", [Key.K, Key.S, Key.DOWN]);
         Key.define("jump", [Key.SPACE, Key.Z]);
         Key.define("attack", [Key.X]);
 
@@ -139,6 +140,12 @@ class Main extends Engine
             return (
                 gamepad.getAxis(0) > DEAD_ZONE
                 || gamepad.check(XboxGamepad.DPAD_RIGHT)
+            );
+        }
+        if(inputName == "up") {
+            return (
+                gamepad.getAxis(1) < DEAD_ZONE
+                || gamepad.check(XboxGamepad.DPAD_UP)
             );
         }
         if(inputName == "down") {
