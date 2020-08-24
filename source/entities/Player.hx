@@ -18,17 +18,17 @@ class Player extends MiniEntity
     //public static inline var AIR_ACCEL = 0;
     public static inline var AIR_ACCEL = 2000;
     public static inline var AIR_DECEL = AIR_ACCEL;
-    public static inline var MAX_RUN_SPEED = 120;
-    public static inline var MAX_AIR_SPEED = 130;
-    public static inline var GRAVITY = 800;
+    public static inline var MAX_RUN_SPEED = 130;
+    public static inline var MAX_AIR_SPEED = 140;
+    public static inline var GRAVITY = 900;
     public static inline var GRAVITY_ON_WALL = 150;
     public static inline var JUMP_POWER = 250;
-    public static inline var JUMP_CANCEL_POWER = 250 / 5;
-    public static inline var WALL_JUMP_POWER_X = 130 / 1.1;
-    public static inline var WALL_JUMP_POWER_Y = 130 / 1.1;
+    public static inline var JUMP_CANCEL_POWER = JUMP_POWER / 2;
+    public static inline var WALL_JUMP_POWER_X = 140;
+    public static inline var WALL_JUMP_POWER_Y = 160;
     public static inline var WALL_STICKINESS = 60;
     public static inline var MAX_FALL_SPEED = 999;
-    public static inline var MAX_FALL_SPEED_ON_WALL = 200;
+    public static inline var MAX_FALL_SPEED_ON_WALL = 0;
 
     public static var sfx:Map<String, Sfx> = null;
 
@@ -37,6 +37,7 @@ class Player extends MiniEntity
     private var velocity:Vector2;
     private var isDead:Bool;
     private var canMove:Bool;
+    private var wallJumpCooldown:Alarm;
 
     public function new(x:Float, y:Float) {
         super(x, y);
@@ -59,10 +60,14 @@ class Player extends MiniEntity
         velocity = new Vector2();
         isDead = false;
         canMove = false;
-        var allowMove = new Alarm(0.2, function() {
+        var allowMove = new Alarm(0.3, function() {
             canMove = true;
         });
         addTween(allowMove, true);
+
+        wallJumpCooldown = new Alarm(0.33);
+        addTween(wallJumpCooldown);
+
         if(sfx == null) {
             sfx = [
                 "jump" => new Sfx("audio/jump.wav"),
@@ -136,7 +141,10 @@ class Player extends MiniEntity
     }
 
     private function movement() {
-        var accel = isOnGround() ? RUN_ACCEL : AIR_ACCEL;
+        var accel:Float = isOnGround() ? RUN_ACCEL : AIR_ACCEL;
+        if(wallJumpCooldown.active) {
+            accel *= wallJumpCooldown.percent;
+        }
         if(
             isOnGround() && (
                 Main.inputCheck("left") && velocity.x > 0
@@ -145,7 +153,10 @@ class Player extends MiniEntity
         ) {
             accel *= RUN_ACCEL_TURN_MULTIPLIER;
         }
-        var decel = isOnGround() ? RUN_DECEL : AIR_DECEL;
+        var decel:Float = isOnGround() ? RUN_DECEL : AIR_DECEL;
+        if(wallJumpCooldown.active) {
+            decel *= wallJumpCooldown.percent;
+        }
         if(Main.inputCheck("left") && !isOnLeftWall()) {
             velocity.x -= accel * HXP.elapsed;
         }
@@ -177,6 +188,7 @@ class Player extends MiniEntity
                     isOnLeftWall() ? WALL_JUMP_POWER_X : -WALL_JUMP_POWER_X
                 );
                 sfx["jump"].play();
+                wallJumpCooldown.start();
             }
         }
         else {
@@ -215,6 +227,13 @@ class Player extends MiniEntity
     }
 
     private function animation() {
+        if(Input.check("left")) {
+            sprite.flipX = true;
+        }
+        else if(Input.check("right")) {
+            sprite.flipX = false;
+        }
+
         if(!canMove) {
             if(isOnGround()) {
                 sprite.play("idle");
@@ -230,12 +249,6 @@ class Player extends MiniEntity
             }
             else {
                 sprite.play("jump");
-                if(velocity.x < 0) {
-                    sprite.flipX = true;
-                }
-                else if(velocity.x > 0) {
-                    sprite.flipX = false;
-                }
             }
         }
         else if(velocity.x != 0) {
@@ -251,7 +264,6 @@ class Player extends MiniEntity
             else {
                 sprite.play("run");
             }
-            sprite.flipX = velocity.x < 0;
         }
         else {
             sprite.play("idle");

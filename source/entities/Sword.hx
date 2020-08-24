@@ -42,6 +42,9 @@ class Sword extends MiniEntity
         collidable = isAttacking;
         if(!isAttacking) {
             sprite.flipX = player.sprite.flipX;
+            if(player.isOnWall()) {
+                sprite.flipX = !sprite.flipX;
+            }
         }
         moveTo(player.x + (sprite.flipX ? -19 : 0), player.y - 4);
         hitbox.x = sprite.flipX ? 0 : 7;
