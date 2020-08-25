@@ -227,7 +227,6 @@ class GameScene extends Scene
                                         );
                                     }
                                 }
-                                level.addPathsUp();
                                 level.updateGraphic();
                                 add(level);
                                 for(entity in level.entities) {

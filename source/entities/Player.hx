@@ -12,9 +12,13 @@ import scenes.*;
 class Player extends MiniEntity
 {
     public static inline var ACCEL = 750;
+    public static inline var GROUND_ACCEL = 750 * 3;
     public static inline var FLAP_ACCEL_MULTIPLIER = 4;
+    public static inline var OFF_GROUND_FLAP_MULTIPLIER = 1.2;
     public static inline var DECEL = ACCEL;
-    public static inline var MAX_SPEED = 150;
+    public static inline var GROUND_DECEL = GROUND_ACCEL;
+    public static inline var MAX_SPEED_IN_AIR = 150;
+    public static inline var MAX_SPEED_ON_GROUND = 70;
     public static inline var GRAVITY = 250;
     public static inline var FLAP_POWER = 100;
     public static inline var MAX_FALL_SPEED = 300;
@@ -37,10 +41,11 @@ class Player extends MiniEntity
         sprite = new Spritemap("graphics/player.png", 16, 16);
         sprite.add("idle", [1]);
         sprite.add("flap", [0, 1, 2, 3, 1], 8, false);
+        sprite.add("run", [1, 3], 4);
         sprite.play("idle");
-        mask = new Hitbox(5, 8);
-        sprite.x = -6;
-        sprite.y = -3;
+        mask = new Hitbox(9, 13);
+        sprite.x = -4;
+        sprite.y = -2;
         graphic = sprite;
         velocity = new Vector2();
         isDead = false;
@@ -61,7 +66,10 @@ class Player extends MiniEntity
                 "skid" => new Sfx("audio/skid.wav"),
                 "die" => new Sfx("audio/die.wav"),
                 "save" => new Sfx("audio/save.wav"),
-                "attack" => new Sfx("audio/attack.wav")
+                "attack" => new Sfx("audio/attack.wav"),
+                "flap1" => new Sfx("audio/flap1.wav"),
+                "flap2" => new Sfx("audio/flap2.wav"),
+                "flap3" => new Sfx("audio/flap3.wav")
             ];
         }
     }
@@ -126,22 +134,43 @@ class Player extends MiniEntity
     }
 
     private function movement() {
-        if(Main.inputCheck("left")) {
-            velocity.x -= ACCEL * HXP.elapsed;
-        }
-        else if(Main.inputCheck("right")) {
-            velocity.x += ACCEL * HXP.elapsed;
+        if(isOnGround()) {
+            if(Main.inputCheck("left")) {
+                velocity.x -= GROUND_ACCEL * HXP.elapsed;
+            }
+            else if(Main.inputCheck("right")) {
+                velocity.x += GROUND_ACCEL * HXP.elapsed;
+            }
+            else {
+                velocity.x = MathUtil.approach(velocity.x, 0, GROUND_DECEL * HXP.elapsed);
+            }
+            velocity.x = MathUtil.clamp(velocity.x, -MAX_SPEED_ON_GROUND, MAX_SPEED_ON_GROUND);
         }
         else {
-            velocity.x = MathUtil.approach(velocity.x, 0, DECEL * HXP.elapsed);
+            if(Main.inputCheck("left")) {
+                velocity.x -= ACCEL * HXP.elapsed;
+            }
+            else if(Main.inputCheck("right")) {
+                velocity.x += ACCEL * HXP.elapsed;
+            }
+            else {
+                velocity.x = MathUtil.approach(velocity.x, 0, DECEL * HXP.elapsed);
+            }
+            velocity.x = MathUtil.clamp(velocity.x, -MAX_SPEED_IN_AIR, MAX_SPEED_IN_AIR);
         }
 
-        velocity.x = MathUtil.clamp(velocity.x, -MAX_SPEED, MAX_SPEED);
         velocity.y = MathUtil.clamp(velocity.y, -MAX_RISE_SPEED, MAX_FALL_SPEED);
 
         if(Main.inputPressed("jump")) {
             sprite.play("flap", true);
-            velocity.y = -FLAP_POWER + velocity.y / 6.66;
+            if(isOnGround()) {
+                sfx['flap1'].play();
+                velocity.y = -FLAP_POWER * OFF_GROUND_FLAP_MULTIPLIER + velocity.y / 3;
+            }
+            else {
+                sfx['flap3'].play();
+                velocity.y = -FLAP_POWER + velocity.y / 3;
+            }
             if(Main.inputCheck("left")) {
                 velocity.x -= ACCEL * FLAP_ACCEL_MULTIPLIER * HXP.elapsed;
             }
@@ -169,6 +198,26 @@ class Player extends MiniEntity
     }
 
     private function animation() {
-
+        if(isOnGround()) {
+            if(velocity.x != 0) {
+                sprite.play("run");
+                if(!sfx["run"].playing) {
+                    sfx["run"].loop();
+                }
+            }
+            else {
+                sprite.play("idle");
+                sfx["run"].stop();
+            }
+        }
+        else {
+            sfx["run"].stop();
+        }
+        if(velocity.x > 0) {
+            sprite.flipX = false;
+        }
+        else if(velocity.x < 0) {
+            sprite.flipX = true;
+        }
     }
 }

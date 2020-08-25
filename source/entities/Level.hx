@@ -14,12 +14,11 @@ class Level extends Entity
     public static inline var MIN_LEVEL_HEIGHT = 180;
     public static inline var MIN_LEVEL_WIDTH_IN_TILES = 45;
     public static inline var MIN_LEVEL_HEIGHT_IN_TILES = 45;
-    public static inline var NUMBER_OF_ROOMS = 4;
-    public static inline var NUMBER_OF_HALLWAYS = 2;
-    public static inline var NUMBER_OF_SHAFTS = 2;
+    public static inline var NUMBER_OF_ROOMS = 1;
+    public static inline var NUMBER_OF_HALLWAYS = 1;
+    public static inline var NUMBER_OF_SHAFTS = 1;
 
     public var walls(default, null):Grid;
-    public var pathUpWalls(default, null):Grid;
     public var entities(default, null):Array<MiniEntity>;
     private var levelType:String;
     private var tiles:Tilemap;
@@ -49,7 +48,6 @@ class Level extends Entity
         }
         if(Random.random < 0.5) {
             flipHorizontally(walls);
-            flipHorizontally(pathUpWalls);
             flipEntitiesHorizontally();
         }
 
@@ -62,19 +60,12 @@ class Level extends Entity
         super.update();
     }
 
-    public function addPathsUp() {
-        for(tileX in 0...walls.columns) {
-            for(tileY in 0...walls.rows) {
-                if(pathUpWalls.getTile(tileX, tileY)) {
-                    walls.setTile(tileX, tileY);
-                }
-            }
-        }
-    }
-
     public function flipEntitiesHorizontally() {
         for(entity in entities) {
-            entity.x = walls.columns * TILE_SIZE - entity.x;
+            entity.x = walls.columns * TILE_SIZE - entity.x - entity.width;
+            if(Type.getClass(entity) == Spike) {
+                cast(entity, Spike).flipOrientationX();
+            }
         }
     }
 
@@ -109,9 +100,6 @@ class Level extends Entity
         var segmentWidth = Std.parseInt(fastXml.node.width.innerData);
         var segmentHeight = Std.parseInt(fastXml.node.height.innerData);
         walls = new Grid(segmentWidth, segmentHeight, TILE_SIZE, TILE_SIZE);
-        pathUpWalls = new Grid(
-            segmentWidth, segmentHeight, TILE_SIZE, TILE_SIZE
-        );
         for (r in fastXml.node.walls.nodes.rect) {
             walls.setRect(
                 Std.int(Std.parseInt(r.att.x) / TILE_SIZE),
@@ -119,16 +107,6 @@ class Level extends Entity
                 Std.int(Std.parseInt(r.att.w) / TILE_SIZE),
                 Std.int(Std.parseInt(r.att.h) / TILE_SIZE)
             );
-        }
-        if(levelType == "room") {
-            for (r in fastXml.node.pathUpWalls.nodes.rect) {
-                pathUpWalls.setRect(
-                    Std.int(Std.parseInt(r.att.x) / TILE_SIZE),
-                    Std.int(Std.parseInt(r.att.y) / TILE_SIZE),
-                    Std.int(Std.parseInt(r.att.w) / TILE_SIZE),
-                    Std.int(Std.parseInt(r.att.h) / TILE_SIZE)
-                );
-            }
         }
 
         // Load optional geometry
@@ -224,12 +202,6 @@ class Level extends Entity
     public function fillTop(offsetX:Int) {
         for(tileX in 0...MIN_LEVEL_WIDTH_IN_TILES) {
             walls.setTile(tileX + offsetX * MIN_LEVEL_WIDTH_IN_TILES, 0);
-            // Clear paths up if not needed
-            for(tileY in 0...walls.rows) {
-                pathUpWalls.clearTile(
-                    tileX + offsetX * MIN_LEVEL_WIDTH_IN_TILES, tileY
-                );
-            }
         }
     }
 

@@ -12,19 +12,9 @@
     <rect x="176" y="116" w="4" h="60"/>
   </walls>
   <optionalWalls>
-    <rect x="4" y="4" w="64" h="20"/>
-    <rect x="4" y="116" w="12" h="60"/>
-    <rect x="60" y="76" w="8" h="40"/>
-    <rect x="112" y="116" w="64" h="60"/>
-    <rect x="120" y="4" w="56" h="44"/>
+    <rect x="4" y="4" w="64" h="32"/>
+    <rect x="4" y="116" w="64" h="60"/>
+    <rect x="112" y="4" w="64" h="64"/>
+    <rect x="144" y="116" w="32" h="60"/>
   </optionalWalls>
-  <pathUpWalls>
-    <rect x="52" y="68" w="16" h="8"/>
-    <rect x="52" y="76" w="8" h="40"/>
-    <rect x="112" y="4" w="8" h="44"/>
-  </pathUpWalls>
-  <objects>
-    <enemy x="52" y="136"/>
-    <enemy x="124" y="72"/>
-  </objects>
 </level>

@@ -3,13 +3,16 @@
   <height>160</height>
   <rooms>
     <rect x="0" y="0" w="64" h="64"/>
+    <rect x="0" y="64" w="16" h="16"/>
+    <rect x="32" y="64" w="16" h="16"/>
   </rooms>
   <hallways>
     <rect x="16" y="16" w="16" h="16"/>
+    <rect x="16" y="64" w="16" h="16"/>
     <rect x="32" y="0" w="16" h="16"/>
   </hallways>
   <shafts>
     <rect x="0" y="32" w="16" h="16"/>
-    <rect x="32" y="32" w="16" h="16"/>
+    <rect x="32" y="32" w="16" h="32"/>
   </shafts>
 </level>

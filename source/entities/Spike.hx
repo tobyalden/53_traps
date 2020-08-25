@@ -15,14 +15,16 @@ class Spike extends MiniEntity
     public static inline var RIGHT_WALL = 3;
 
     public var orientation(default, null):Int;
+    public var length(default, null):Int;
     private var glow:VarTween;
+    private var sprite:TiledImage;
 
     public function new(x:Float, y:Float, orientation:Int, length:Int)
     {
         super(x, y);
         this.orientation = orientation;
+        this.length = length;
         type = "hazard";
-        var sprite:TiledImage;
         if(orientation == FLOOR) {
             sprite = new TiledImage("graphics/spike_floor.png", length, 4);
             setHitbox(length, 4);
@@ -45,5 +47,18 @@ class Spike extends MiniEntity
         glow = new VarTween(TweenType.PingPong);
         addTween(glow);
         glow.tween(sprite, 'alpha', 0.8, 1, Ease.sineInOut);
+    }
+
+    public function flipOrientationX() {
+        if(orientation == LEFT_WALL) {
+            orientation = RIGHT_WALL;
+            sprite = new TiledImage("graphics/spike_rightwall.png", 4, length);
+            setHitbox(4, length);
+        }
+        else if(orientation == RIGHT_WALL) {
+            orientation = LEFT_WALL;
+            sprite = new TiledImage("graphics/spike_leftwall.png", 4, length);
+            setHitbox(4, length);
+        }
     }
 }

@@ -4,16 +4,13 @@
   <walls>
     <rect x="0" y="0" w="180" h="4"/>
     <rect x="0" y="4" w="4" h="64"/>
-    <rect x="0" y="116" w="180" h="64"/>
+    <rect x="0" y="116" w="4" h="64"/>
+    <rect x="4" y="176" w="176" h="4"/>
     <rect x="176" y="4" w="4" h="64"/>
+    <rect x="176" y="116" w="4" h="60"/>
   </walls>
   <optionalWalls>
-    <rect x="52" y="68" w="28" h="48"/>
-    <rect x="112" y="48" w="28" h="68"/>
+    <rect x="4" y="116" w="64" h="60"/>
+    <rect x="132" y="4" w="44" h="64"/>
   </optionalWalls>
-  <objects>
-    <player x="12" y="148"/>
-    <enemy x="12" y="12"/>
-    <enemy x="84" y="84"/>
-  </objects>
 </level>
