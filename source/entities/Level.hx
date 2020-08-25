@@ -14,9 +14,9 @@ class Level extends Entity
     public static inline var MIN_LEVEL_HEIGHT = 180;
     public static inline var MIN_LEVEL_WIDTH_IN_TILES = 45;
     public static inline var MIN_LEVEL_HEIGHT_IN_TILES = 45;
-    public static inline var NUMBER_OF_ROOMS = 2;
-    public static inline var NUMBER_OF_HALLWAYS = 1;
-    public static inline var NUMBER_OF_SHAFTS = 1;
+    public static inline var NUMBER_OF_ROOMS = 4;
+    public static inline var NUMBER_OF_HALLWAYS = 2;
+    public static inline var NUMBER_OF_SHAFTS = 2;
 
     public var walls(default, null):Grid;
     public var pathUpWalls(default, null):Grid;
@@ -28,7 +28,10 @@ class Level extends Entity
         super(x, y);
         this.levelType = levelType;
         type = "walls";
-        if(levelType == "room") {
+        if(levelType == "start") {
+            loadLevel('0');
+        }
+        else if(levelType == "room") {
             loadLevel('${
                 Std.int(Math.floor(Random.random * NUMBER_OF_ROOMS))
             }');
@@ -47,6 +50,7 @@ class Level extends Entity
         if(Random.random < 0.5) {
             flipHorizontally(walls);
             flipHorizontally(pathUpWalls);
+            flipEntitiesHorizontally();
         }
 
         updateGraphic();
@@ -65,6 +69,12 @@ class Level extends Entity
                     walls.setTile(tileX, tileY);
                 }
             }
+        }
+    }
+
+    public function flipEntitiesHorizontally() {
+        for(entity in entities) {
+            entity.x = walls.columns * TILE_SIZE - entity.x;
         }
     }
 
@@ -139,12 +149,13 @@ class Level extends Entity
         // Load entities
         entities = new Array<MiniEntity>();
         if(fastXml.hasNode.objects) {
-            //for(e in fastXml.node.objects.nodes.player) {
-                //var player = new Player(
-                    //Std.parseInt(e.att.x), Std.parseInt(e.att.y)
-                //);
-                //entities.push(player);
-            //}
+            for(e in fastXml.node.objects.nodes.player) {
+                var player = new Player(
+                    Std.parseInt(e.att.x), Std.parseInt(e.att.y)
+                );
+                entities.push(player);
+                break;
+            }
             for(e in fastXml.node.objects.nodes.enemy) {
                 var enemy = new Bat(
                     Std.parseInt(e.att.x), Std.parseInt(e.att.y)

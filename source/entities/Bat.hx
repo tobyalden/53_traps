@@ -15,7 +15,7 @@ class Bat extends MiniEntity
 
     private var sprite:Spritemap;
     private var hitbox:Hitbox;
-    private var isAttacking:Bool;
+    private var isActive:Bool;
     private var velocity:Vector2;
 
     public function new(x:Float, y:Float) {
@@ -29,19 +29,8 @@ class Bat extends MiniEntity
         sprite.x = -3;
         sprite.y = -3;
         graphic = sprite;
-        isAttacking = false;
+        isActive = false;
         velocity = new Vector2();
-    }
-
-    public function attack() {
-        if(isAttacking) {
-            return;
-        }
-        isAttacking = true;
-        Player.sfx["attack"].play();
-        HXP.alarm(0.2, function() {
-            isAttacking = false;
-        });
     }
 
     public function die() {
@@ -55,12 +44,17 @@ class Bat extends MiniEntity
             die();
         }
         var player = scene.getInstance("player");
-        velocity = getHeadingTowards(player);
-        velocity.normalize(SPEED);
-        moveBy(
-            velocity.x * HXP.elapsed, velocity.y * HXP.elapsed,
-            ["walls", "enemy"]
-        );
+        if(getHeadingTowards(player).length < 100) {
+            isActive = true;
+        }
+        if(isActive) {
+            velocity = getHeadingTowards(player);
+            velocity.normalize(SPEED);
+            moveBy(
+                velocity.x * HXP.elapsed, velocity.y * HXP.elapsed,
+                ["walls", "enemy"]
+            );
+        }
         super.update();
     }
 }

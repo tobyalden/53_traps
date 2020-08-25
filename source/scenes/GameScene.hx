@@ -53,8 +53,8 @@ class GameScene extends Scene
         //}
         loadMaps(0);
         placeLevels();
-        player = add(new Player(50, 50));
-        add(player.sword);
+        //player = add(new Player(50, 50));
+        //add(player.sword);
         if(sfx == null) {
             sfx = [
                 "restart" => new Sfx("audio/restart.wav")
@@ -186,6 +186,7 @@ class GameScene extends Scene
     }
 
     private function placeLevels() {
+        var placedStart = false;
         allLevels = new Array<Level>();
         var levelTypes = ["room", "hallway", "shaft"];
         var count = 0;
@@ -200,10 +201,15 @@ class GameScene extends Scene
                     ) {
                         var canPlace = false;
                         while(!canPlace) {
+                            var levelType = levelTypes[count];
+                            if(count == 0 && !placedStart) {
+                                levelType = "start";
+                                placedStart = true;
+                            }
                             var level = new Level(
                                 tileX * Level.MIN_LEVEL_WIDTH,
                                 tileY * Level.MIN_LEVEL_HEIGHT,
-                                levelTypes[count]
+                                levelType
                             );
                             var levelWidth = Std.int(
                                 level.width / Level.MIN_LEVEL_WIDTH
@@ -245,6 +251,10 @@ class GameScene extends Scene
                                 for(entity in level.entities) {
                                     entity.moveBy(level.x, level.y);
                                     add(entity);
+                                    if(entity.name == "player") {
+                                        player = cast(entity, Player);
+                                        add(player.sword);
+                                    }
                                 }
                                 allLevels.push(level);
                             }

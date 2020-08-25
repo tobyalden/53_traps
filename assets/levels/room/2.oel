@@ -1,0 +1,27 @@
+<level>
+  <width>360</width>
+  <height>180</height>
+  <walls>
+    <rect x="0" y="0" w="68" h="4"/>
+    <rect x="0" y="4" w="4" h="64"/>
+    <rect x="0" y="116" w="4" h="64"/>
+    <rect x="4" y="176" w="64" h="4"/>
+    <rect x="112" y="0" w="136" h="4"/>
+    <rect x="112" y="176" w="136" h="4"/>
+    <rect x="292" y="0" w="68" h="4"/>
+    <rect x="292" y="176" w="68" h="4"/>
+    <rect x="356" y="4" w="4" h="64"/>
+    <rect x="356" y="116" w="4" h="60"/>
+  </walls>
+  <optionalWalls>
+    <rect x="4" y="144" w="64" h="32"/>
+    <rect x="112" y="144" w="64" h="32"/>
+    <rect x="292" y="144" w="64" h="32"/>
+  </optionalWalls>
+  <pathUpWalls>
+    <rect x="44" y="60" w="76" h="8"/>
+    <rect x="44" y="68" w="8" h="32"/>
+    <rect x="112" y="4" w="8" h="56"/>
+    <rect x="240" y="4" w="8" h="132"/>
+  </pathUpWalls>
+</level>

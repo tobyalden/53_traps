@@ -29,7 +29,7 @@ class Player extends MiniEntity
     public static inline var MAX_FALL_SPEED_ON_WALL = 0;
     public static inline var WALL_CLIMB_ACCEL = 500;
     public static inline var WALL_DESCEND_ACCEL = 1000;
-    public static inline var MAX_WALL_CLIMB_SPEED = 75;
+    public static inline var MAX_WALL_CLIMB_SPEED = 175;
     public static inline var MAX_WALL_DESCEND_SPEED = 200;
 
     public static var sfx:Map<String, Sfx> = null;

@@ -29,6 +29,9 @@
     <rect x="280" y="60" w="16" h="72"/>
   </pathUpWalls>
   <objects>
-    <player x="12" y="148"/>
+    <enemy x="56" y="20"/>
+    <enemy x="108" y="104"/>
+    <enemy x="224" y="100"/>
+    <enemy x="312" y="20"/>
   </objects>
 </level>

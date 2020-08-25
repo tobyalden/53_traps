@@ -1,0 +1,15 @@
+<level>
+  <width>180</width>
+  <height>180</height>
+  <walls>
+    <rect x="0" y="0" w="68" h="4"/>
+    <rect x="0" y="4" w="4" h="64"/>
+    <rect x="0" y="116" w="68" h="64"/>
+    <rect x="112" y="0" w="68" h="68"/>
+    <rect x="112" y="176" w="68" h="4"/>
+    <rect x="176" y="116" w="4" h="60"/>
+  </walls>
+  <objects>
+    <player x="28" y="92"/>
+  </objects>
+</level>
