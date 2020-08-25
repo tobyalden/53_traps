@@ -14,13 +14,13 @@ class Player extends MiniEntity
     public static inline var ACCEL = 750;
     public static inline var GROUND_ACCEL = 750 * 3;
     public static inline var FLAP_ACCEL_MULTIPLIER = 4;
-    public static inline var OFF_GROUND_FLAP_MULTIPLIER = 1.2;
+    public static inline var OFF_GROUND_FLAP_MULTIPLIER = 1.1;
     public static inline var DECEL = ACCEL;
     public static inline var GROUND_DECEL = GROUND_ACCEL;
     public static inline var MAX_SPEED_IN_AIR = 150;
     public static inline var MAX_SPEED_ON_GROUND = 70;
     public static inline var GRAVITY = 250;
-    public static inline var FLAP_POWER = 100;
+    public static inline var FLAP_POWER = 110;
     public static inline var MAX_FALL_SPEED = 300;
     public static inline var MAX_RISE_SPEED = 300;
 
@@ -193,7 +193,12 @@ class Player extends MiniEntity
     }
 
     override public function moveCollideY(_:Entity) {
-        velocity.y = 0;
+        if(isOnGround()) {
+            velocity.y = 0;
+        }
+        else {
+            velocity.y = -velocity.y / 4;
+        }
         return true;
     }
 

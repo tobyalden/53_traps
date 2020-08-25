@@ -61,7 +61,6 @@ class GameScene extends Scene
         //camera.setTo(
             //player.centerX - HXP.width / 2, player.centerY - HXP.height / 2
         //);
-        //camera.scale = 0.1;
         camera.setTo(
             Math.floor(player.centerX / HXP.width) * HXP.width,
             Math.floor(player.centerY / HXP.height) * HXP.height,
