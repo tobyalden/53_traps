@@ -160,7 +160,7 @@ class Level extends Entity
                 var enemy = new Bat(
                     Std.parseInt(e.att.x), Std.parseInt(e.att.y)
                 );
-                entities.push(enemy);
+                //entities.push(enemy);
             }
             for(e in fastXml.node.objects.nodes.spike_floor) {
                 var spike = new Spike(

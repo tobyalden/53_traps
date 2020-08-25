@@ -35,26 +35,8 @@ class GameScene extends Scene
 
         curtain = add(new Curtain());
         curtain.fadeOut(1);
-
-        //level = add(new Level("level"));
-        //for(entity in level.entities) {
-            //add(entity);
-            //if(entity.name == "player") {
-                //player = cast(entity, Player);
-                //add(player.sword);
-                //if(currentCheckpoint == null) {
-                    //currentCheckpoint = new Vector2(player.x, player.y);
-                //}
-                //else {
-                    //player.x = currentCheckpoint.x;
-                    //player.y = currentCheckpoint.y;
-                //}
-            //}
-        //}
         loadMaps(0);
         placeLevels();
-        //player = add(new Player(50, 50));
-        //add(player.sword);
         if(sfx == null) {
             sfx = [
                 "restart" => new Sfx("audio/restart.wav")
@@ -76,15 +58,15 @@ class GameScene extends Scene
             sfx["restart"].play();
         }
         super.update();
-        camera.setTo(
-            player.centerX - HXP.width / 2, player.centerY - HXP.height / 2
-        );
-        //camera.scale = 0.1;
         //camera.setTo(
-            //Math.floor(player.centerX / HXP.width) * HXP.width,
-            //Math.floor(player.centerY / HXP.height) * HXP.height,
-            //0, 0
+            //player.centerX - HXP.width / 2, player.centerY - HXP.height / 2
         //);
+        //camera.scale = 0.1;
+        camera.setTo(
+            Math.floor(player.centerX / HXP.width) * HXP.width,
+            Math.floor(player.centerY / HXP.height) * HXP.height,
+            0, 0
+        );
     }
 
     private function loadMaps(mapNumber:Int) {

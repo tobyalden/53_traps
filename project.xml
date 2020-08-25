@@ -5,7 +5,7 @@
 	<app file="Main" main="Main" path="export"/>
 	<icon path="HaxePunk-icon.svg"/>
 	<window fps="60" background="0x000000"/>
-    <window width="320" height="180" resizable="false" unless="mobile" background="0x000000"/>
+    <window width="180" height="180" resizable="true" unless="mobile" background="0x000000"/>
     <!--<window width="180" height="180" resizable="true" unless="mobile"/>-->
 	<window orientation="landscape" vsync="true" antialiasing="0" if="cpp"/>
 
