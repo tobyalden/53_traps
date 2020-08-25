@@ -5,7 +5,7 @@
 	<app file="Main" main="Main" path="export"/>
 	<icon path="HaxePunk-icon.svg"/>
 	<window fps="60" background="0x000000"/>
-    <window width="180" height="180" resizable="true" unless="mobile" background="0x000000"/>
+    <window width="320" height="180" resizable="true" unless="mobile" background="0x000000"/>
     <!--<window width="400" height="400" resizable="true" unless="mobile"/>-->
 	<window orientation="landscape" vsync="true" antialiasing="0" if="cpp"/>
 
@@ -19,4 +19,5 @@
 	<assets path="assets/audio" rename="audio" include="*.wav|*.ogg"/>
 	<assets path="assets/font" rename="font" include="*.ttf"/>
 	<assets path="assets/levels" rename="levels" include="*.oel"/>
+	<assets path="assets/maps" rename="maps" include="*.oel"/>
 </project>

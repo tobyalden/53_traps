@@ -14,7 +14,9 @@ class Curtain extends MiniEntity
 
     public function new() {
         super(0, 0);
-        sprite = new ColoredRect(180, 180, 0x000000);
+        sprite = new ColoredRect(HXP.width, HXP.height, 0x000000);
+        sprite.scrollX = 0;
+        sprite.scrollY = 0;
         graphic = sprite;
         layer = -999;
         fader = new VarTween();
@@ -22,7 +24,6 @@ class Curtain extends MiniEntity
     }
 
     override public function update() {
-        followCamera = scene.camera;
         super.update();
     }
 

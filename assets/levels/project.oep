@@ -9,6 +9,8 @@
 	</settings> 
 	<layers> 
 		<grid name="walls" gridSize="4" exportAsObjects="true"/>
+		<grid name="optionalWalls" gridSize="4" exportAsObjects="true" color="#AAFF0000"/>
+		<grid name="pathUpWalls" gridSize="4" exportAsObjects="true" color="#AAFF00FF"/>
 		<objects name="objects" gridSize="4"/>
 		<grid name="guide" gridSize="180" exportAsObjects="true" color="#AA98FB98"/>
 	</layers> 
