@@ -17,8 +17,6 @@ class GameScene extends Scene
     public static inline var MAP_TILE_SIZE = 16;
 
     public static var currentCheckpoint:Vector2 = null;
-    public static var totalTime:Float = 0;
-    public static var deathCount:Float = 0;
     public static var sfx:Map<String, Sfx> = null;
 
     public var curtain(default, null):Curtain;
@@ -31,8 +29,6 @@ class GameScene extends Scene
     private var player:Player;
 
     override public function begin() {
-        addGraphic(new Image("graphics/background.png"), 99);
-
         curtain = add(new Curtain());
         curtain.fadeOut(1);
         loadMaps(0);
@@ -48,11 +44,8 @@ class GameScene extends Scene
     }
 
     override public function update() {
-        totalTime += HXP.elapsed;
         if(Main.inputPressed("restart")) {
             GameScene.currentCheckpoint = null;
-            GameScene.totalTime = 0;
-            GameScene.deathCount = 0;
             //stopAmbience();
             HXP.scene = new GameScene();
             sfx["restart"].play();
@@ -233,7 +226,6 @@ class GameScene extends Scene
                                     add(entity);
                                     if(entity.name == "player") {
                                         player = cast(entity, Player);
-                                        add(player.sword);
                                     }
                                 }
                                 allLevels.push(level);

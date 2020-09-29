@@ -9,11 +9,11 @@ import openfl.Assets;
 
 class Level extends Entity
 {
-    public static inline var TILE_SIZE = 4;
-    public static inline var MIN_LEVEL_WIDTH = 180;
+    public static inline var TILE_SIZE = 10;
+    public static inline var MIN_LEVEL_WIDTH = 320;
     public static inline var MIN_LEVEL_HEIGHT = 180;
-    public static inline var MIN_LEVEL_WIDTH_IN_TILES = 45;
-    public static inline var MIN_LEVEL_HEIGHT_IN_TILES = 45;
+    public static inline var MIN_LEVEL_WIDTH_IN_TILES = 32;
+    public static inline var MIN_LEVEL_HEIGHT_IN_TILES = 18;
     public static inline var NUMBER_OF_ROOMS = 1;
     public static inline var NUMBER_OF_HALLWAYS = 1;
     public static inline var NUMBER_OF_SHAFTS = 1;
@@ -46,10 +46,9 @@ class Level extends Entity
                 Std.int(Math.floor(Random.random * NUMBER_OF_SHAFTS))
             }');
         }
-        if(Random.random < 0.5) {
-            flipHorizontally(walls);
-            flipEntitiesHorizontally();
-        }
+        //if(Random.random < 0.5) {
+            //flipHorizontally(walls);
+        //}
 
         updateGraphic();
         mask = walls;
@@ -60,16 +59,8 @@ class Level extends Entity
         super.update();
     }
 
-    public function flipEntitiesHorizontally() {
-        for(entity in entities) {
-            entity.x = walls.columns * TILE_SIZE - entity.x - entity.width;
-            if(Type.getClass(entity) == Spike) {
-                cast(entity, Spike).flipOrientationX();
-            }
-        }
-    }
-
     public function flipHorizontally(wallsToFlip:Grid) {
+        // TODO: Flip entities as well
         for(tileX in 0...Std.int(wallsToFlip.columns / 2)) {
             for(tileY in 0...wallsToFlip.rows) {
                 var tempLeft:Null<Bool> = wallsToFlip.getTile(tileX, tileY);
@@ -134,12 +125,6 @@ class Level extends Entity
                 entities.push(player);
                 break;
             }
-            for(e in fastXml.node.objects.nodes.enemy) {
-                var enemy = new Bat(
-                    Std.parseInt(e.att.x), Std.parseInt(e.att.y)
-                );
-                //entities.push(enemy);
-            }
             for(e in fastXml.node.objects.nodes.spike_floor) {
                 var spike = new Spike(
                     Std.parseInt(e.att.x), Std.parseInt(e.att.y),
@@ -167,19 +152,6 @@ class Level extends Entity
                     Spike.RIGHT_WALL, Std.parseInt(e.att.height)
                 );
                 entities.push(spike);
-            }
-            for(e in fastXml.node.objects.nodes.checkpoint) {
-                var checkpoint = new Checkpoint(
-                    Std.parseInt(e.att.x), Std.parseInt(e.att.y)
-                );
-                entities.push(checkpoint);
-            }
-            for(e in fastXml.node.objects.nodes.endtrigger) {
-                var endTrigger = new EndTrigger(
-                    Std.parseInt(e.att.x), Std.parseInt(e.att.y),
-                    Std.parseInt(e.att.width), Std.parseInt(e.att.height)
-                );
-                entities.push(endTrigger);
             }
         }
     }
@@ -222,7 +194,7 @@ class Level extends Entity
         for(tileX in 0...walls.columns) {
             for(tileY in 0...walls.rows) {
                 if(walls.getTile(tileX, tileY)) {
-                    tiles.setTile(tileX, tileY, tileX + tileY * walls.columns);
+                    tiles.setTile(tileX, tileY, 0);
                 }
             }
         }

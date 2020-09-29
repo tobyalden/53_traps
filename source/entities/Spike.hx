@@ -26,20 +26,20 @@ class Spike extends MiniEntity
         this.length = length;
         type = "hazard";
         if(orientation == FLOOR) {
-            sprite = new TiledImage("graphics/spike_floor.png", length, 4);
-            setHitbox(length, 4);
+            sprite = new TiledImage("graphics/spike_floor.png", length, 5);
+            setHitbox(length, 5);
         }
         else if(orientation == CEILING) {
-            sprite = new TiledImage("graphics/spike_ceiling.png", length, 4);
-            setHitbox(length, 4);
+            sprite = new TiledImage("graphics/spike_ceiling.png", length, 5);
+            setHitbox(length, 5);
         }
         else if(orientation == LEFT_WALL) {
-            sprite = new TiledImage("graphics/spike_leftwall.png", 4, length);
-            setHitbox(4, length);
+            sprite = new TiledImage("graphics/spike_leftwall.png", 5, length);
+            setHitbox(5, length);
         }
         else { // RIGHT_WALL
-            sprite = new TiledImage("graphics/spike_rightwall.png", 4, length);
-            setHitbox(4, length);
+            sprite = new TiledImage("graphics/spike_rightwall.png", 5, length);
+            setHitbox(5, length);
         }
         sprite.alpha = 1;
         graphic = sprite;
@@ -47,18 +47,5 @@ class Spike extends MiniEntity
         glow = new VarTween(TweenType.PingPong);
         addTween(glow);
         glow.tween(sprite, 'alpha', 0.8, 1, Ease.sineInOut);
-    }
-
-    public function flipOrientationX() {
-        if(orientation == LEFT_WALL) {
-            orientation = RIGHT_WALL;
-            sprite = new TiledImage("graphics/spike_rightwall.png", 4, length);
-            setHitbox(4, length);
-        }
-        else if(orientation == RIGHT_WALL) {
-            orientation = LEFT_WALL;
-            sprite = new TiledImage("graphics/spike_leftwall.png", 4, length);
-            setHitbox(4, length);
-        }
     }
 }

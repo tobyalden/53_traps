@@ -64,8 +64,6 @@ class MainMenu extends Scene
             flasher.tween(message, 'alpha', 0, 0.1, Ease.sineInOut);
             var reset = new Alarm(1, function() {
                 GameScene.currentCheckpoint = null;
-                GameScene.totalTime = 0;
-                GameScene.deathCount = 0;
                 HXP.scene = new GameScene();
             });
             addTween(reset, true);

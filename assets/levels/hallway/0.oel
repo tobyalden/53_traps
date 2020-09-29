@@ -1,16 +1,16 @@
 <level>
-  <width>180</width>
+  <width>320</width>
   <height>180</height>
   <walls>
-    <rect x="0" y="0" w="180" h="4"/>
-    <rect x="0" y="4" w="4" h="64"/>
-    <rect x="0" y="116" w="4" h="64"/>
-    <rect x="4" y="176" w="176" h="4"/>
-    <rect x="176" y="4" w="4" h="64"/>
-    <rect x="176" y="116" w="4" h="60"/>
+    <rect x="0" y="0" w="320" h="10"/>
+    <rect x="0" y="10" w="10" h="60"/>
+    <rect x="0" y="110" w="10" h="70"/>
+    <rect x="10" y="170" w="310" h="10"/>
+    <rect x="270" y="20" w="10" h="40"/>
+    <rect x="280" y="40" w="20" h="10"/>
+    <rect x="290" y="20" w="10" h="20"/>
+    <rect x="290" y="50" w="10" h="10"/>
+    <rect x="310" y="10" w="10" h="60"/>
+    <rect x="310" y="110" w="10" h="60"/>
   </walls>
-  <optionalWalls>
-    <rect x="4" y="116" w="64" h="60"/>
-    <rect x="132" y="4" w="44" h="64"/>
-  </optionalWalls>
 </level>

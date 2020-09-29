@@ -1,28 +1,24 @@
 <project> 
 	<name>Unfold</name>
 	<settings> 
-		<defaultWidth>180</defaultWidth>
+		<defaultWidth>320</defaultWidth>
 		<defaultHeight>180</defaultHeight>
-		<maxWidth>1800</maxWidth>
+		<maxWidth>3200</maxWidth>
 		<maxHeight>1800</maxHeight>
 		<workingDirectory>../graphics</workingDirectory>
 	</settings> 
 	<layers> 
-		<grid name="walls" gridSize="4" exportAsObjects="true"/>
-		<grid name="optionalWalls" gridSize="4" exportAsObjects="true" color="#AAFF0000"/>
-		<grid name="pathUpWalls" gridSize="4" exportAsObjects="true" color="#AAFF00FF"/>
-		<objects name="objects" gridSize="4"/>
-		<grid name="guide" gridSize="180" exportAsObjects="true" color="#AA98FB98"/>
+		<grid name="walls" gridSize="10" exportAsObjects="true"/>
+		<grid name="optionalWalls" gridSize="10" exportAsObjects="true" color="#AAFF0000"/>
+		<objects name="objects" gridSize="5"/>
+		<grid name="guide" gridSize="100" exportAsObjects="true" color="#AA98FB98"/>
 	</layers> 
 	<objects>
-		<object name="player" image="player_icon.png" width="16" height="24" limit="1"/>
-		<object name="enemy" image="enemy_icon.png" width="24" height="24"/>
-		<object name="spike_floor" image="spike_floor.png" width="4" height="4" resizableX="true" tile="true"/>
-		<object name="spike_ceiling" image="spike_ceiling.png" width="4" height="4" resizableX="true" tile="true"/>
-		<object name="spike_leftwall" image="spike_leftwall.png" width="4" height="4" resizableY="true" tile="true"/>
-		<object name="spike_rightwall" image="spike_rightwall.png" width="4" height="4" resizableY="true" tile="true"/>
-		<object name="checkpoint" image="checkpoint_icon.png" width="8" height="16" />
-		<object name="endtrigger" image="endtrigger.png" width="16" height="16" resizableX="true" resizableY="true"/>
+		<object name="player" image="player_icon.png" width="10" height="10" limit="1"/>
+		<object name="spike_floor" image="spike_floor.png" width="5" height="5" resizableX="true" tile="true"/>
+		<object name="spike_ceiling" image="spike_ceiling.png" width="5" height="5" resizableX="true" tile="true"/>
+		<object name="spike_leftwall" image="spike_leftwall.png" width="5" height="5" resizableY="true" tile="true"/>
+		<object name="spike_rightwall" image="spike_rightwall.png" width="5" height="5" resizableY="true" tile="true"/>
 	</objects>
 </project>
 

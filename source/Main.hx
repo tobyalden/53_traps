@@ -34,7 +34,8 @@ class Main extends Engine
         //HXP.fullscreen = true;
         //HXP.screen.scaleMode = new UniformScaleMode(UniformScaleType.Expand);
 
-        HXP.scene = new GameScene();
+        //HXP.scene = new GameScene();
+        HXP.scene = new MainMenu();
         gamepad = Gamepad.gamepad(0);
         Gamepad.onConnect.bind(function(newGamepad:Gamepad) {
             if(gamepad == null) {

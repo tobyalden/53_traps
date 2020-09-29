@@ -15,8 +15,6 @@ import openfl.Assets;
 
 class Ending extends Scene
 {
-    //public static inline var MAP_TILE_SIZE = 16;
-
     public static var sfx:Map<String, Sfx> = null;
     private var curtain:Curtain;
     private var message:Text;
@@ -26,13 +24,8 @@ class Ending extends Scene
         addGraphic(new Image("graphics/ending.png"), 1);
         curtain = add(new Curtain());
         curtain.fadeOut(1);
-        var totalTime = timeRound(GameScene.totalTime);
-        var deathText = "deaths";
-        if(GameScene.deathCount == 1) {
-            deathText = "death";
-        }
         message = new Text(
-            'END\n\n${totalTime} seconds\n${GameScene.deathCount} ${deathText}',
+            'END',
             0, 10, 180, 180,
             {color: 0x000000, align: TextAlignType.CENTER, leading: 0}
         );
