@@ -51,14 +51,12 @@ class GameScene extends Scene
             sfx["restart"].play();
         }
         super.update();
+        camera.setTo(player.centerX - HXP.width / 3, 0);
         //camera.setTo(
-            //player.centerX - HXP.width / 2, player.centerY - HXP.height / 2
+            //Math.floor(player.centerX / HXP.width) * HXP.width,
+            //Math.floor(player.centerY / HXP.height) * HXP.height,
+            //0, 0
         //);
-        camera.setTo(
-            Math.floor(player.centerX / HXP.width) * HXP.width,
-            Math.floor(player.centerY / HXP.height) * HXP.height,
-            0, 0
-        );
     }
 
     private function loadMaps(mapNumber:Int) {
@@ -212,11 +210,11 @@ class GameScene extends Scene
                                         map.setTile(
                                             tileX + checkX, tileY + checkY
                                         );
-                                        sealLevel(
-                                            level,
-                                            tileX, tileY,
-                                            checkX, checkY
-                                        );
+                                        //sealLevel(
+                                            //level,
+                                            //tileX, tileY,
+                                            //checkX, checkY
+                                        //);
                                     }
                                 }
                                 level.updateGraphic();

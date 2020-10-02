@@ -2,25 +2,10 @@
   <width>320</width>
   <height>180</height>
   <walls>
-    <rect x="0" y="0" w="140" h="10"/>
-    <rect x="0" y="10" w="10" h="60"/>
-    <rect x="0" y="110" w="10" h="70"/>
-    <rect x="10" y="170" w="130" h="10"/>
-    <rect x="180" y="0" w="140" h="10"/>
-    <rect x="180" y="170" w="140" h="10"/>
-    <rect x="270" y="20" w="30" h="10"/>
-    <rect x="270" y="30" w="10" h="20"/>
-    <rect x="270" y="60" w="30" h="10"/>
-    <rect x="280" y="40" w="20" h="10"/>
-    <rect x="290" y="50" w="10" h="10"/>
-    <rect x="310" y="10" w="10" h="60"/>
-    <rect x="310" y="110" w="10" h="60"/>
+    <rect x="0" y="0" w="10" h="180"/>
+    <rect x="10" y="110" w="310" h="70"/>
   </walls>
   <objects>
-    <player x="150" y="80"/>
-    <spike_floor x="210" y="165" width="60"/>
-    <spike_leftwall x="10" y="30" height="20"/>
-    <spike_ceiling x="205" y="10" width="55"/>
-    <spike_rightwall x="305" y="125" height="25"/>
+    <player x="60" y="90"/>
   </objects>
 </level>

@@ -19,14 +19,9 @@ class Player extends MiniEntity
     public static inline var MAX_RUN_SPEED = 120;
     public static inline var MAX_AIR_SPEED = 160;
     public static inline var GRAVITY = 500;
-    public static inline var GRAVITY_ON_WALL = 150;
     public static inline var JUMP_POWER = 160;
     public static inline var JUMP_CANCEL_POWER = 40;
-    public static inline var WALL_JUMP_POWER_X = 130 / 1.15;
-    public static inline var WALL_JUMP_POWER_Y = 130 / 1.15;
-    public static inline var WALL_STICKINESS = 60;
     public static inline var MAX_FALL_SPEED = 270;
-    public static inline var MAX_FALL_SPEED_ON_WALL = 200;
 
     public static var sfx:Map<String, Sfx> = null;
 
@@ -43,12 +38,11 @@ class Player extends MiniEntity
         sprite.add("idle", [0]);
         sprite.add("run", [1, 2, 3, 2], 8);
         sprite.add("jump", [4]);
-        sprite.add("wall", [5]);
         sprite.add("skid", [6]);
         sprite.play("idle");
         mask = new Hitbox(6, 12);
         sprite.x = -1;
-        sprite.flipX = true;
+        sprite.flipX = false;
         graphic = sprite;
         velocity = new Vector2();
         isDead = false;
@@ -139,19 +133,7 @@ class Player extends MiniEntity
         if(isOnGround()) {
             velocity.y = 0;
             if(Main.inputPressed("jump")) {
-                velocity.y = -JUMP_POWER;
-                sfx["jump"].play();
-            }
-        }
-        else if(isOnWall()) {
-            var gravity = velocity.y > 0 ? GRAVITY_ON_WALL : GRAVITY;
-            velocity.y += gravity * HXP.elapsed;
-            velocity.y = Math.min(velocity.y, MAX_FALL_SPEED_ON_WALL);
-            if(Main.inputPressed("jump")) {
-                velocity.y = -WALL_JUMP_POWER_Y;
-                velocity.x = (
-                    isOnLeftWall() ? WALL_JUMP_POWER_X : -WALL_JUMP_POWER_X
-                );
+                velocity.y = -JUMP_POWER - Math.abs(velocity.x / 6);
                 sfx["jump"].play();
             }
         }
@@ -162,20 +144,11 @@ class Player extends MiniEntity
             velocity.y += GRAVITY * HXP.elapsed;
             velocity.y = Math.min(velocity.y, MAX_FALL_SPEED);
         }
-
         moveBy(velocity.x * HXP.elapsed, velocity.y * HXP.elapsed, "walls");
     }
 
     override public function moveCollideX(_:Entity) {
-        if(isOnGround()) {
-            velocity.x = 0;
-        }
-        else if(isOnLeftWall()) {
-            velocity.x = Math.max(velocity.x, -WALL_STICKINESS);
-        }
-        else if(isOnRightWall()) {
-            velocity.x = Math.min(velocity.x, WALL_STICKINESS);
-        }
+        velocity.x = 0;
         return true;
     }
 
@@ -194,18 +167,12 @@ class Player extends MiniEntity
             }
         }
         else if(!isOnGround()) {
-            if(isOnWall()) {
-                sprite.play("wall");
-                sprite.flipX = isOnLeftWall();
+            sprite.play("jump");
+            if(velocity.x < 0) {
+                sprite.flipX = true;
             }
-            else {
-                sprite.play("jump");
-                if(velocity.x < 0) {
-                    sprite.flipX = true;
-                }
-                else if(velocity.x > 0) {
-                    sprite.flipX = false;
-                }
+            else if(velocity.x > 0) {
+                sprite.flipX = false;
             }
         }
         else if(velocity.x != 0) {
@@ -229,15 +196,6 @@ class Player extends MiniEntity
     }
 
     private function sound() {
-        if(isOnWall()) {
-            if(!sfx["slide"].playing) {
-                sfx["slide"].loop();
-            }
-            sfx["slide"].volume = Math.abs(velocity.y) / MAX_FALL_SPEED_ON_WALL;
-        }
-        else {
-            sfx["slide"].stop();
-        }
         if(isOnGround() && Math.abs(velocity.x) > 0 && !sfx["skid"].playing) {
             if(!sfx["run"].playing) {
                 sfx["run"].loop();

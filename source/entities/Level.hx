@@ -15,7 +15,7 @@ class Level extends Entity
     public static inline var MIN_LEVEL_WIDTH_IN_TILES = 32;
     public static inline var MIN_LEVEL_HEIGHT_IN_TILES = 18;
     public static inline var NUMBER_OF_ROOMS = 1;
-    public static inline var NUMBER_OF_HALLWAYS = 1;
+    public static inline var NUMBER_OF_HALLWAYS = 4;
     public static inline var NUMBER_OF_SHAFTS = 1;
 
     public var walls(default, null):Grid;
@@ -46,9 +46,9 @@ class Level extends Entity
                 Std.int(Math.floor(Random.random * NUMBER_OF_SHAFTS))
             }');
         }
-        //if(Random.random < 0.5) {
+        if(Random.random < 0.5 && levelType != "start") {
             //flipHorizontally(walls);
-        //}
+        }
 
         updateGraphic();
         mask = walls;
@@ -120,7 +120,7 @@ class Level extends Entity
         if(fastXml.hasNode.objects) {
             for(e in fastXml.node.objects.nodes.player) {
                 var player = new Player(
-                    Std.parseInt(e.att.x), Std.parseInt(e.att.y)
+                    Std.parseInt(e.att.x), Std.parseInt(e.att.y) + 8
                 );
                 entities.push(player);
                 break;

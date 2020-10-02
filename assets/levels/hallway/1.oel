@@ -1,0 +1,24 @@
+<level>
+  <width>320</width>
+  <height>180</height>
+  <walls>
+    <rect x="0" y="110" w="10" h="70"/>
+    <rect x="10" y="170" w="310" h="10"/>
+    <rect x="70" y="0" w="130" h="30"/>
+    <rect x="70" y="90" w="60" h="20"/>
+    <rect x="170" y="90" w="30" h="20"/>
+    <rect x="230" y="150" w="90" h="20"/>
+    <rect x="290" y="130" w="30" h="20"/>
+    <rect x="310" y="110" w="10" h="20"/>
+  </walls>
+  <optionalWalls>
+    <rect x="10" y="130" w="20" h="40"/>
+    <rect x="30" y="150" w="20" h="20"/>
+    <rect x="70" y="110" w="130" h="20"/>
+    <rect x="130" y="70" w="70" h="20"/>
+    <rect x="130" y="90" w="40" h="20"/>
+    <rect x="170" y="30" w="30" h="40"/>
+    <rect x="200" y="0" w="50" h="30"/>
+    <rect x="200" y="90" w="50" h="20"/>
+  </optionalWalls>
+</level>
