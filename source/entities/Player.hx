@@ -22,6 +22,7 @@ class Player extends MiniEntity
     public static inline var JUMP_POWER = 160;
     public static inline var JUMP_CANCEL_POWER = 40;
     public static inline var MAX_FALL_SPEED = 270;
+    public static inline var RUN_SPEED_APPLIED_TO_JUMP_POWER = 1 / 6;
 
     public static var sfx:Map<String, Sfx> = null;
 
@@ -133,7 +134,10 @@ class Player extends MiniEntity
         if(isOnGround()) {
             velocity.y = 0;
             if(Main.inputPressed("jump")) {
-                velocity.y = -JUMP_POWER - Math.abs(velocity.x / 6);
+                velocity.y = -(
+                    JUMP_POWER
+                    + Math.abs(velocity.x * RUN_SPEED_APPLIED_TO_JUMP_POWER)
+                );
                 sfx["jump"].play();
             }
         }

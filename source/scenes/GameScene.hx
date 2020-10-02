@@ -15,6 +15,7 @@ import openfl.Assets;
 class GameScene extends Scene
 {
     public static inline var MAP_TILE_SIZE = 16;
+    public static inline var NUMBER_OF_TRAPS = 53;
 
     public static var currentCheckpoint:Vector2 = null;
     public static var sfx:Map<String, Sfx> = null;

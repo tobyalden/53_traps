@@ -7,6 +7,11 @@ import haxepunk.masks.*;
 import haxepunk.math.*;
 import openfl.Assets;
 
+typedef TileCoordinates = {
+    var tileX:Int;
+    var tileY:Int;
+}
+
 class Level extends Entity
 {
     public static inline var TILE_SIZE = 10;
@@ -20,6 +25,7 @@ class Level extends Entity
 
     public var walls(default, null):Grid;
     public var entities(default, null):Array<MiniEntity>;
+    public var openSpots(default, null):Map<String, Array<TileCoordinates>>;
     private var levelType:String;
     private var tiles:Tilemap;
 
@@ -115,7 +121,7 @@ class Level extends Entity
             }
         }
 
-        // Load entities
+        // Load player
         entities = new Array<MiniEntity>();
         if(fastXml.hasNode.objects) {
             for(e in fastXml.node.objects.nodes.player) {
@@ -125,33 +131,30 @@ class Level extends Entity
                 entities.push(player);
                 break;
             }
-            for(e in fastXml.node.objects.nodes.spike_floor) {
-                var spike = new Spike(
-                    Std.parseInt(e.att.x), Std.parseInt(e.att.y),
-                    Spike.FLOOR, Std.parseInt(e.att.width)
-                );
-                entities.push(spike);
-            }
-            for(e in fastXml.node.objects.nodes.spike_ceiling) {
-                var spike = new Spike(
-                    Std.parseInt(e.att.x), Std.parseInt(e.att.y),
-                    Spike.CEILING, Std.parseInt(e.att.width)
-                );
-                entities.push(spike);
-            }
-            for(e in fastXml.node.objects.nodes.spike_leftwall) {
-                var spike = new Spike(
-                    Std.parseInt(e.att.x), Std.parseInt(e.att.y),
-                    Spike.LEFT_WALL, Std.parseInt(e.att.height)
-                );
-                entities.push(spike);
-            }
-            for(e in fastXml.node.objects.nodes.spike_rightwall) {
-                var spike = new Spike(
-                    Std.parseInt(e.att.x), Std.parseInt(e.att.y),
-                    Spike.RIGHT_WALL, Std.parseInt(e.att.height)
-                );
-                entities.push(spike);
+        }
+
+        // Create open spots
+        openSpots = [
+            "wall" => new Array<TileCoordinates>()
+        ];
+        if(levelType == "start") {
+            return;
+        }
+        for(tileX in 0...walls.columns) {
+            for(tileY in 0...walls.rows) {
+                if(
+                    walls.getTile(tileX, tileY)
+                    && tileY != 0
+                    && tileY != walls.rows - 1
+                    && (
+                        !walls.getTile(tileX - 1, tileY, true)
+                        || !walls.getTile(tileX + 1, tileY, true)
+                        || !walls.getTile(tileX, tileY - 1, true)
+                        || !walls.getTile(tileX, tileY + 1, true)
+                    )
+                ) {
+                    openSpots["wall"].push({tileX: tileX, tileY: tileY});
+                }
             }
         }
     }
@@ -186,6 +189,15 @@ class Level extends Entity
         }
     }
 
+    private function hasOpenSpot(spotType, tileX, tileY) {
+        for(openSpot in openSpots[spotType]) {
+            if(openSpot.tileX == tileX && openSpot.tileY == tileY) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function updateGraphic() {
         tiles = new Tilemap(
             'graphics/stone.png',
@@ -193,7 +205,10 @@ class Level extends Entity
         );
         for(tileX in 0...walls.columns) {
             for(tileY in 0...walls.rows) {
-                if(walls.getTile(tileX, tileY)) {
+                if(hasOpenSpot("wall", tileX, tileY)) {
+                    tiles.setTile(tileX, tileY, 1);
+                }
+                else if(walls.getTile(tileX, tileY)) {
                     tiles.setTile(tileX, tileY, 0);
                 }
             }
