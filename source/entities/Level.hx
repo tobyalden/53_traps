@@ -10,6 +10,7 @@ import openfl.Assets;
 typedef TileCoordinates = {
     var tileX:Int;
     var tileY:Int;
+    var level:Level;
 }
 
 class Level extends Entity
@@ -153,7 +154,7 @@ class Level extends Entity
                         || !walls.getTile(tileX, tileY + 1, true)
                     )
                 ) {
-                    openSpots["wall"].push({tileX: tileX, tileY: tileY});
+                    openSpots["wall"].push({tileX: tileX, tileY: tileY, level: this});
                 }
             }
         }

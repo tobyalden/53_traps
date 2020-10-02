@@ -11,6 +11,7 @@ import haxepunk.Tween;
 import haxepunk.tweens.misc.*;
 import haxepunk.utils.*;
 import openfl.Assets;
+import entities.Level;
 
 class GameScene extends Scene
 {
@@ -28,12 +29,14 @@ class GameScene extends Scene
     private var map:Grid;
     private var allLevels:Array<Level>;
     private var player:Player;
+    public var openSpots(default, null):Map<String, Array<TileCoordinates>>;
 
     override public function begin() {
         curtain = add(new Curtain());
         curtain.fadeOut(1);
         loadMaps(0);
         placeLevels();
+        placeTraps();
         if(sfx == null) {
             sfx = [
                 "restart" => new Sfx("audio/restart.wav")
@@ -234,6 +237,33 @@ class GameScene extends Scene
                 }
             }
             count++;
+        }
+    }
+
+    private function placeTraps() {
+        // Collect open spots
+        openSpots = [
+            "wall" => new Array<TileCoordinates>()
+        ];
+        for(level in allLevels) {
+            for(spotType in level.openSpots.keys()) {
+                for(openSpot in level.openSpots[spotType]) {
+                    openSpots[spotType].push(openSpot);
+                }
+            }
+        }
+        for(spotType in openSpots.keys()) {
+            HXP.shuffle(openSpots[spotType]);
+        }
+        for(i in 0...NUMBER_OF_TRAPS) {
+            var openSpot = openSpots["wall"].pop();
+            trace(openSpot);
+            var trap = new SpikeBall(new Vector2(
+                openSpot.level.x + openSpot.tileX * Level.TILE_SIZE + Level.TILE_SIZE / 2,
+                openSpot.level.y + openSpot.tileY * Level.TILE_SIZE + Level.TILE_SIZE / 2
+            ));
+            add(trap);
+            trace('added trap');
         }
     }
 }

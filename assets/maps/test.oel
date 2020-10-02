@@ -5,6 +5,6 @@
     <rect x="0" y="0" w="16" h="16"/>
   </rooms>
   <hallways>
-    <rect x="16" y="0" w="1584" h="16"/>
+    <rect x="16" y="0" w="160" h="16"/>
   </hallways>
 </level>
