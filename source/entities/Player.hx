@@ -23,6 +23,7 @@ class Player extends MiniEntity
     public static inline var MAX_AIR_SPEED = 160;
     public static inline var GRAVITY = 500;
     public static inline var JUMP_POWER = 160;
+    public static inline var CROUCH_JUMP_POWER = 100;
     public static inline var JUMP_CANCEL_POWER = 40;
     public static inline var MAX_FALL_SPEED = 270;
     public static inline var RUN_SPEED_APPLIED_TO_JUMP_POWER = 1 / 6;
@@ -32,7 +33,10 @@ class Player extends MiniEntity
     private var sprite:Spritemap;
     private var velocity:Vector2;
     private var isDead:Bool;
+    private var isCrouching:Bool;
+    private var wasCrouching:Bool;
     private var canMove:Bool;
+    private var hitbox:Hitbox;
 
     public function new(x:Float, y:Float) {
         super(x, y);
@@ -43,13 +47,17 @@ class Player extends MiniEntity
         sprite.add("run", [1, 2, 3, 2], 8);
         sprite.add("jump", [4]);
         sprite.add("skid", [6]);
+        sprite.add("crouch", [19]);
         sprite.play("idle");
-        mask = new Hitbox(6, 12);
+        hitbox = new Hitbox(6, 12);
+        mask = hitbox;
         sprite.x = -1;
         sprite.flipX = false;
         graphic = sprite;
         velocity = new Vector2();
         isDead = false;
+        isCrouching = false;
+        wasCrouching = false;
         canMove = false;
         var allowMove = new Alarm(0.2, function() {
             canMove = true;
@@ -79,6 +87,7 @@ class Player extends MiniEntity
             collisions();
         }
         super.update();
+        wasCrouching = isCrouching;
     }
 
     private function collisions() {
@@ -110,9 +119,22 @@ class Player extends MiniEntity
     }
 
     private function movement() {
+        isCrouching = Main.inputCheck("down");
+        if(isCrouching && !wasCrouching) {
+            hitbox = new Hitbox(6, 10);
+            y += 2;
+            sprite.y = -2;
+            mask = hitbox;
+        }
+        else if(!isCrouching && wasCrouching) {
+            hitbox = new Hitbox(6, 12);
+            y -= 2;
+            sprite.y = 0;
+            mask = hitbox;
+        }
         var accel:Float = isOnGround() ? RUN_ACCEL : AIR_ACCEL;
         if(
-            isOnGround() && !isOnIce() && (
+            isOnGround() && !isOnIce() && !isCrouching && (
                 Main.inputCheck("left") && velocity.x > 0
                 || Main.inputCheck("right") && velocity.x < 0
             )
@@ -124,10 +146,18 @@ class Player extends MiniEntity
             accel *= ICE_ACCEL_MULTIPLIER;
             decel *= ICE_DECEL_MULTIPLIER;
         }
-        if(Main.inputCheck("left") && !isOnLeftWall()) {
+        if(
+            Main.inputCheck("left")
+            && !isOnLeftWall()
+            && !(isOnGround() && isCrouching)
+        ) {
             velocity.x -= accel * HXP.elapsed;
         }
-        else if(Main.inputCheck("right") && !isOnRightWall()) {
+        else if(
+            Main.inputCheck("right")
+            && !isOnRightWall()
+            && !(isOnGround() && isCrouching)
+        ) {
             velocity.x += accel * HXP.elapsed;
         }
         else if(!isOnWall()) {
@@ -144,8 +174,9 @@ class Player extends MiniEntity
         if(isOnGround()) {
             velocity.y = 0;
             if(Main.inputPressed("jump")) {
+                var jumpPower = isCrouching ? CROUCH_JUMP_POWER : JUMP_POWER;
                 velocity.y = -(
-                    JUMP_POWER
+                    jumpPower
                     + Math.abs(velocity.x * RUN_SPEED_APPLIED_TO_JUMP_POWER)
                 );
                 sfx["jump"].play();
@@ -179,6 +210,9 @@ class Player extends MiniEntity
             else {
                 sprite.play("jump");
             }
+        }
+        else if(isCrouching) {
+            sprite.play("crouch");
         }
         else if(!isOnGround()) {
             sprite.play("jump");

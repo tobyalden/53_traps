@@ -262,8 +262,8 @@ class GameScene extends Scene
         }
         for(i in 0...NUMBER_OF_TRAPS) {
             var openSpot = openSpots["edges"].pop();
-            //var enemy = HXP.choose("spikeball", "icicle", "ice", "medusa");
-            var enemy = HXP.choose("ballspewer");
+            var enemy = HXP.choose("spikeball", "icicle", "ice", "medusa", "ballspewer");
+            //var enemy = HXP.choose("ballspewer");
             if(enemy == "spikeball") {
                 var trap = new SpikeBall(new Vector2(
                     openSpot.level.x + openSpot.tileX * Level.TILE_SIZE + Level.TILE_SIZE / 2,
