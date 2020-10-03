@@ -16,6 +16,10 @@ class MiniEntity extends Entity
         return collide("walls", x, y + 1) != null;
     }
 
+    private function isOnIce() {
+        return collide("ice", x, y + 1) != null;
+    }
+
     private function isOnCeiling() {
         return collide("walls", x, y - 1) != null;
     }

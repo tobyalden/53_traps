@@ -17,6 +17,7 @@ class GameScene extends Scene
 {
     public static inline var MAP_TILE_SIZE = 16;
     public static inline var NUMBER_OF_TRAPS = 53;
+    public static inline var ICE_RADIUS = 9;
 
     public static var currentCheckpoint:Vector2 = null;
     public static var sfx:Map<String, Sfx> = null;
@@ -244,7 +245,8 @@ class GameScene extends Scene
         // Collect open spots
         openSpots = [
             "edges" => new Array<TileCoordinates>(),
-            "on_ceiling" => new Array<TileCoordinates>()
+            "on_ceiling" => new Array<TileCoordinates>(),
+            "in_floor" => new Array<TileCoordinates>()
         ];
         for(level in allLevels) {
             for(spotType in level.openSpots.keys()) {
@@ -257,16 +259,31 @@ class GameScene extends Scene
             HXP.shuffle(openSpots[spotType]);
         }
         for(i in 0...NUMBER_OF_TRAPS) {
-            var openSpot = openSpots["on_ceiling"].pop();
             //var trap = new SpikeBall(new Vector2(
                 //openSpot.level.x + openSpot.tileX * Level.TILE_SIZE + Level.TILE_SIZE / 2,
                 //openSpot.level.y + openSpot.tileY * Level.TILE_SIZE + Level.TILE_SIZE / 2
             //));
-            var trap = new Icicle(
-                openSpot.level.x + openSpot.tileX * Level.TILE_SIZE,
-                openSpot.level.y + openSpot.tileY * Level.TILE_SIZE
-            );
-            add(trap);
+            //var trap = new Icicle(
+                //openSpot.level.x + openSpot.tileX * Level.TILE_SIZE,
+                //openSpot.level.y + openSpot.tileY * Level.TILE_SIZE
+            //);
+            //add(trap);
+            var openSpot = openSpots["in_floor"].pop();
+            var tileStart = Std.int(Math.round(-ICE_RADIUS / 2));
+            var tileEnd = tileStart + ICE_RADIUS;
+            for(tileX in tileStart...tileEnd) {
+                for(tileY in tileStart...tileEnd) {
+                    if(openSpot.level.walls.getTile(
+                        openSpot.tileX + tileX, openSpot.tileY + tileY, false
+                    )) {
+                        var trap = new IceBlock(
+                            openSpot.level.x + (openSpot.tileX + tileX) * Level.TILE_SIZE,
+                            openSpot.level.y + (openSpot.tileY + tileY) * Level.TILE_SIZE
+                        );
+                        add(trap);
+                    }
+                }
+            }
         }
     }
 }

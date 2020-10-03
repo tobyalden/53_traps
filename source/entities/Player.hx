@@ -11,11 +11,13 @@ import scenes.*;
 
 class Player extends MiniEntity
 {
-    public static inline var RUN_ACCEL = 450;
+    public static inline var RUN_ACCEL = 450 / 1.5;
     public static inline var RUN_ACCEL_TURN_MULTIPLIER = 2;
     public static inline var RUN_DECEL = RUN_ACCEL * RUN_ACCEL_TURN_MULTIPLIER;
-    public static inline var AIR_ACCEL = 500;
-    public static inline var AIR_DECEL = 460;
+    public static inline var ICE_ACCEL_MULTIPLIER = 1 / 2;
+    public static inline var ICE_DECEL_MULTIPLIER = 1 / 12;
+    public static inline var AIR_ACCEL = 500 / 1.5;
+    public static inline var AIR_DECEL = 460 / 1.5;
     public static inline var MAX_RUN_SPEED = 120;
     public static inline var MAX_AIR_SPEED = 160;
     public static inline var GRAVITY = 500;
@@ -107,16 +109,20 @@ class Player extends MiniEntity
     }
 
     private function movement() {
-        var accel = isOnGround() ? RUN_ACCEL : AIR_ACCEL;
+        var accel:Float = isOnGround() ? RUN_ACCEL : AIR_ACCEL;
         if(
-            isOnGround() && (
+            isOnGround() && !isOnIce() && (
                 Main.inputCheck("left") && velocity.x > 0
                 || Main.inputCheck("right") && velocity.x < 0
             )
         ) {
             accel *= RUN_ACCEL_TURN_MULTIPLIER;
         }
-        var decel = isOnGround() ? RUN_DECEL : AIR_DECEL;
+        var decel:Float = isOnGround() ? RUN_DECEL : AIR_DECEL;
+        if(isOnIce()) {
+            accel *= ICE_ACCEL_MULTIPLIER;
+            decel *= ICE_DECEL_MULTIPLIER;
+        }
         if(Main.inputCheck("left") && !isOnLeftWall()) {
             velocity.x -= accel * HXP.elapsed;
         }
@@ -181,8 +187,9 @@ class Player extends MiniEntity
         }
         else if(velocity.x != 0) {
             if(
-                velocity.x > 0 && Main.inputCheck("left")
-                || velocity.x < 0 && Main.inputCheck("right")
+                (velocity.x > 0 && Main.inputCheck("left")
+                || velocity.x < 0 && Main.inputCheck("right"))
+                && !isOnIce()
             ) {
                 sprite.play("skid");
                 if(!sfx["skid"].playing) {
