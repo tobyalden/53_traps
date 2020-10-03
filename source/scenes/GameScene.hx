@@ -16,7 +16,7 @@ import entities.Level;
 class GameScene extends Scene
 {
     public static inline var MAP_TILE_SIZE = 16;
-    public static inline var NUMBER_OF_TRAPS = 200;
+    public static inline var NUMBER_OF_TRAPS = 25;
     public static inline var ICE_RADIUS = 9;
 
     public static var currentCheckpoint:Vector2 = null;
@@ -246,7 +246,8 @@ class GameScene extends Scene
         openSpots = [
             "edges" => new Array<TileCoordinates>(),
             "on_ceiling" => new Array<TileCoordinates>(),
-            "in_floor" => new Array<TileCoordinates>()
+            "in_floor" => new Array<TileCoordinates>(),
+            "near_center" => new Array<TileCoordinates>()
         ];
         for(level in allLevels) {
             for(spotType in level.openSpots.keys()) {
@@ -260,7 +261,8 @@ class GameScene extends Scene
         }
         for(i in 0...NUMBER_OF_TRAPS) {
             var openSpot = openSpots["edges"].pop();
-            var enemy = HXP.choose("spikeball", "icicle", "ice");
+            //var enemy = HXP.choose("spikeball", "icicle", "ice");
+            var enemy = HXP.choose("medusa");
             if(enemy == "spikeball") {
                 var trap = new SpikeBall(new Vector2(
                     openSpot.level.x + openSpot.tileX * Level.TILE_SIZE + Level.TILE_SIZE / 2,
@@ -293,6 +295,14 @@ class GameScene extends Scene
                         }
                     }
                 }
+            }
+            else if(enemy == "medusa") {
+                var openSpot = openSpots["near_center"].pop();
+                var trap = new Medusa(
+                    openSpot.level.x + openSpot.tileX * Level.TILE_SIZE,
+                    openSpot.level.y + openSpot.tileY * Level.TILE_SIZE
+                );
+                add(trap);
             }
         }
     }

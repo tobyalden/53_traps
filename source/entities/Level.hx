@@ -139,7 +139,8 @@ class Level extends Entity
         openSpots = [
             "edges" => new Array<TileCoordinates>(),
             "on_ceiling" => new Array<TileCoordinates>(),
-            "in_floor" => new Array<TileCoordinates>()
+            "in_floor" => new Array<TileCoordinates>(),
+            "near_center" => new Array<TileCoordinates>()
         ];
         if(levelType == "start") {
             return;
@@ -173,6 +174,13 @@ class Level extends Entity
                     //&& tileY != 0
                 ) {
                     openSpots["in_floor"].push({tileX: tileX, tileY: tileY, level: this});
+                }
+                var centerRadius = 3;
+                if(
+                    tileY > centerRadius
+                    && tileY < walls.rows - centerRadius - 1
+                ) {
+                    openSpots["near_center"].push({tileX: tileX, tileY: tileY, level: this});
                 }
             }
         }
@@ -227,7 +235,7 @@ class Level extends Entity
                 if(walls.getTile(tileX, tileY)) {
                     tiles.setTile(tileX, tileY, 0);
                 }
-                //if(hasOpenSpot("in_floor", tileX, tileY)) {
+                //if(hasOpenSpot("near_center", tileX, tileY)) {
                     //tiles.setTile(tileX, tileY, 1);
                 //}
             }
