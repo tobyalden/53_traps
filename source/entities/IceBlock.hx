@@ -15,6 +15,7 @@ class IceBlock extends MiniEntity
 
     public function new(x:Float, y:Float) {
         super(x, y);
+        layer = 5;
         type = "ice";
         sprite = new Image("graphics/iceblock.png");
         graphic = sprite;

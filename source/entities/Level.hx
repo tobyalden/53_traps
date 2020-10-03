@@ -32,6 +32,7 @@ class Level extends Entity
 
     public function new(x:Int, y:Int, levelType:String) {
         super(x, y);
+        layer = 10;
         this.levelType = levelType;
         type = "walls";
         if(levelType == "start") {
@@ -223,12 +224,12 @@ class Level extends Entity
         );
         for(tileX in 0...walls.columns) {
             for(tileY in 0...walls.rows) {
-                if(hasOpenSpot("in_floor", tileX, tileY)) {
-                    tiles.setTile(tileX, tileY, 1);
-                }
-                else if(walls.getTile(tileX, tileY)) {
+                if(walls.getTile(tileX, tileY)) {
                     tiles.setTile(tileX, tileY, 0);
                 }
+                //if(hasOpenSpot("in_floor", tileX, tileY)) {
+                    //tiles.setTile(tileX, tileY, 1);
+                //}
             }
         }
         graphic = tiles;

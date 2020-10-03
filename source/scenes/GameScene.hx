@@ -16,7 +16,7 @@ import entities.Level;
 class GameScene extends Scene
 {
     public static inline var MAP_TILE_SIZE = 16;
-    public static inline var NUMBER_OF_TRAPS = 53;
+    public static inline var NUMBER_OF_TRAPS = 200;
     public static inline var ICE_RADIUS = 9;
 
     public static var currentCheckpoint:Vector2 = null;
@@ -259,28 +259,38 @@ class GameScene extends Scene
             HXP.shuffle(openSpots[spotType]);
         }
         for(i in 0...NUMBER_OF_TRAPS) {
-            //var trap = new SpikeBall(new Vector2(
-                //openSpot.level.x + openSpot.tileX * Level.TILE_SIZE + Level.TILE_SIZE / 2,
-                //openSpot.level.y + openSpot.tileY * Level.TILE_SIZE + Level.TILE_SIZE / 2
-            //));
-            //var trap = new Icicle(
-                //openSpot.level.x + openSpot.tileX * Level.TILE_SIZE,
-                //openSpot.level.y + openSpot.tileY * Level.TILE_SIZE
-            //);
-            //add(trap);
-            var openSpot = openSpots["in_floor"].pop();
-            var tileStart = Std.int(Math.round(-ICE_RADIUS / 2));
-            var tileEnd = tileStart + ICE_RADIUS;
-            for(tileX in tileStart...tileEnd) {
-                for(tileY in tileStart...tileEnd) {
-                    if(openSpot.level.walls.getTile(
-                        openSpot.tileX + tileX, openSpot.tileY + tileY, false
-                    )) {
-                        var trap = new IceBlock(
-                            openSpot.level.x + (openSpot.tileX + tileX) * Level.TILE_SIZE,
-                            openSpot.level.y + (openSpot.tileY + tileY) * Level.TILE_SIZE
-                        );
-                        add(trap);
+            var openSpot = openSpots["edges"].pop();
+            var enemy = HXP.choose("spikeball", "icicle", "ice");
+            if(enemy == "spikeball") {
+                var trap = new SpikeBall(new Vector2(
+                    openSpot.level.x + openSpot.tileX * Level.TILE_SIZE + Level.TILE_SIZE / 2,
+                    openSpot.level.y + openSpot.tileY * Level.TILE_SIZE + Level.TILE_SIZE / 2
+                ));
+                add(trap);
+            }
+            else if(enemy == "icicle") {
+                var openSpot = openSpots["on_ceiling"].pop();
+                var trap = new Icicle(
+                    openSpot.level.x + openSpot.tileX * Level.TILE_SIZE,
+                    openSpot.level.y + openSpot.tileY * Level.TILE_SIZE
+                );
+                add(trap);
+            }
+            else if(enemy == "ice") {
+                var openSpot = openSpots["in_floor"].pop();
+                var tileStart = Std.int(Math.round(-ICE_RADIUS / 2));
+                var tileEnd = tileStart + ICE_RADIUS;
+                for(tileX in tileStart...tileEnd) {
+                    for(tileY in tileStart...tileEnd) {
+                        if(openSpot.level.walls.getTile(
+                            openSpot.tileX + tileX, openSpot.tileY + tileY, false
+                        )) {
+                            var trap = new IceBlock(
+                                openSpot.level.x + (openSpot.tileX + tileX) * Level.TILE_SIZE,
+                                openSpot.level.y + (openSpot.tileY + tileY) * Level.TILE_SIZE
+                            );
+                            add(trap);
+                        }
                     }
                 }
             }
