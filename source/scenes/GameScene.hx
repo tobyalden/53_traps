@@ -243,7 +243,8 @@ class GameScene extends Scene
     private function placeTraps() {
         // Collect open spots
         openSpots = [
-            "wall" => new Array<TileCoordinates>()
+            "edges" => new Array<TileCoordinates>(),
+            "on_ceiling" => new Array<TileCoordinates>()
         ];
         for(level in allLevels) {
             for(spotType in level.openSpots.keys()) {
@@ -256,14 +257,16 @@ class GameScene extends Scene
             HXP.shuffle(openSpots[spotType]);
         }
         for(i in 0...NUMBER_OF_TRAPS) {
-            var openSpot = openSpots["wall"].pop();
-            trace(openSpot);
-            var trap = new SpikeBall(new Vector2(
-                openSpot.level.x + openSpot.tileX * Level.TILE_SIZE + Level.TILE_SIZE / 2,
-                openSpot.level.y + openSpot.tileY * Level.TILE_SIZE + Level.TILE_SIZE / 2
-            ));
+            var openSpot = openSpots["on_ceiling"].pop();
+            //var trap = new SpikeBall(new Vector2(
+                //openSpot.level.x + openSpot.tileX * Level.TILE_SIZE + Level.TILE_SIZE / 2,
+                //openSpot.level.y + openSpot.tileY * Level.TILE_SIZE + Level.TILE_SIZE / 2
+            //));
+            var trap = new Icicle(
+                openSpot.level.x + openSpot.tileX * Level.TILE_SIZE,
+                openSpot.level.y + openSpot.tileY * Level.TILE_SIZE
+            );
             add(trap);
-            trace('added trap');
         }
     }
 }

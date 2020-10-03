@@ -136,7 +136,8 @@ class Level extends Entity
 
         // Create open spots
         openSpots = [
-            "wall" => new Array<TileCoordinates>()
+            "edges" => new Array<TileCoordinates>(),
+            "on_ceiling" => new Array<TileCoordinates>()
         ];
         if(levelType == "start") {
             return;
@@ -154,7 +155,15 @@ class Level extends Entity
                         || !walls.getTile(tileX, tileY + 1, true)
                     )
                 ) {
-                    openSpots["wall"].push({tileX: tileX, tileY: tileY, level: this});
+                    openSpots["edges"].push({tileX: tileX, tileY: tileY, level: this});
+                }
+                else if(
+                    !walls.getTile(tileX, tileY)
+                    && walls.getTile(tileX, tileY - 1, true)
+                    && !walls.getTile(tileX, tileY + 1, true)
+                    && tileY != 0
+                ) {
+                    openSpots["on_ceiling"].push({tileX: tileX, tileY: tileY, level: this});
                 }
             }
         }
@@ -206,7 +215,7 @@ class Level extends Entity
         );
         for(tileX in 0...walls.columns) {
             for(tileY in 0...walls.rows) {
-                if(hasOpenSpot("wall", tileX, tileY)) {
+                if(hasOpenSpot("on_ceiling", tileX, tileY)) {
                     tiles.setTile(tileX, tileY, 1);
                 }
                 else if(walls.getTile(tileX, tileY)) {

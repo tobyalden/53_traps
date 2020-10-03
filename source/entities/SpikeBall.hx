@@ -43,6 +43,7 @@ class SpikeBall extends MiniEntity
         var orbitArm = new Vector2(orbitRadius, 0);
         orbitArm.rotate(age * orbitSpeed);
         moveTo(orbitAxis.x + orbitArm.x, orbitAxis.y + orbitArm.y);
+        super.update();
     }
 
     override public function render(camera:Camera) {
