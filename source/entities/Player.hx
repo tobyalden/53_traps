@@ -14,6 +14,7 @@ class Player extends MiniEntity
     public static inline var RUN_ACCEL = 450 / 1.5;
     public static inline var RUN_ACCEL_TURN_MULTIPLIER = 2;
     public static inline var RUN_DECEL = RUN_ACCEL * RUN_ACCEL_TURN_MULTIPLIER;
+    public static inline var ICE_MAX_SPEED_MULTIPLIER = 1.5;
     public static inline var ICE_ACCEL_MULTIPLIER = 1 / 2;
     public static inline var ICE_DECEL_MULTIPLIER = 1 / 12;
     public static inline var AIR_ACCEL = 500 / 1.5;
@@ -134,7 +135,10 @@ class Player extends MiniEntity
                 velocity.x, 0, decel * HXP.elapsed
             );
         }
-        var maxSpeed = isOnGround() ? MAX_RUN_SPEED : MAX_AIR_SPEED;
+        var maxSpeed:Float = isOnGround() ? MAX_RUN_SPEED : MAX_AIR_SPEED;
+        if(isOnIce()) {
+            maxSpeed *= ICE_MAX_SPEED_MULTIPLIER;
+        }
         velocity.x = MathUtil.clamp(velocity.x, -maxSpeed, maxSpeed);
 
         if(isOnGround()) {

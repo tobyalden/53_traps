@@ -18,6 +18,7 @@ class Medusa extends MiniEntity
     private var sprite:Image;
     private var age:Float;
     private var startY:Float;
+    private var activated:Bool;
 
     public function new(x:Float, y:Float) {
         super(x, y);
@@ -28,12 +29,19 @@ class Medusa extends MiniEntity
         mask = new Hitbox(15, 15);
         age = Math.random() * Math.PI * 2;
         startY = y;
+        activated = false;
     }
 
     override public function update() {
-        age += HXP.elapsed;
-        y = startY + Math.cos(age * SINE_WAVE_SPEED) * SINE_WAVE_SIZE;
-        moveBy(-HORIZONTAL_SPEED * HXP.elapsed, 0);
+        var player = scene.getInstance("player");
+        if(scene.camera.x + HXP.width > x) {
+            activated = true;
+        }
+        if(activated) {
+            age += HXP.elapsed;
+            y = startY + Math.cos(age * SINE_WAVE_SPEED) * SINE_WAVE_SIZE;
+            moveBy(-HORIZONTAL_SPEED * HXP.elapsed, 0);
+        }
         super.update();
     }
 }

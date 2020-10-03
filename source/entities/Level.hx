@@ -140,7 +140,8 @@ class Level extends Entity
             "edges" => new Array<TileCoordinates>(),
             "on_ceiling" => new Array<TileCoordinates>(),
             "in_floor" => new Array<TileCoordinates>(),
-            "near_center" => new Array<TileCoordinates>()
+            "near_center" => new Array<TileCoordinates>(),
+            "walls" => new Array<TileCoordinates>()
         ];
         if(levelType == "start") {
             return;
@@ -181,6 +182,18 @@ class Level extends Entity
                     && tileY < walls.rows - centerRadius - 1
                 ) {
                     openSpots["near_center"].push({tileX: tileX, tileY: tileY, level: this});
+                }
+                if(
+                    walls.getTile(tileX, tileY)
+                    && walls.getTile(tileX, tileY + 1)
+                    && (
+                        !walls.getTile(tileX - 1, tileY, true)
+                        //&& !walls.getTile(tileX - 1, tileY + 1, true)
+                        || !walls.getTile(tileX + 1, tileY, true)
+                        //&& !walls.getTile(tileX + 1, tileY + 1, true)
+                    )
+                ) {
+                    openSpots["walls"].push({tileX: tileX, tileY: tileY, level: this});
                 }
             }
         }
@@ -235,9 +248,9 @@ class Level extends Entity
                 if(walls.getTile(tileX, tileY)) {
                     tiles.setTile(tileX, tileY, 0);
                 }
-                //if(hasOpenSpot("near_center", tileX, tileY)) {
-                    //tiles.setTile(tileX, tileY, 1);
-                //}
+                if(hasOpenSpot("walls", tileX, tileY)) {
+                    tiles.setTile(tileX, tileY, 1);
+                }
             }
         }
         graphic = tiles;
