@@ -17,7 +17,8 @@ class GameScene extends Scene
 {
     public static inline var MAP_TILE_SIZE = 16;
     public static inline var NUMBER_OF_TRAPS = 50;
-    public static inline var ICE_RADIUS = 9;
+    public static inline var BASE_ICE_RADIUS = 9;
+    public static inline var BASE_SPIKE_TRAP_RADIUS = 5;
 
     public static var currentCheckpoint:Vector2 = null;
     public static var sfx:Map<String, Sfx> = null;
@@ -262,8 +263,8 @@ class GameScene extends Scene
         }
         for(i in 0...NUMBER_OF_TRAPS) {
             var openSpot = openSpots["edges"].pop();
-            var enemy = HXP.choose("spikeball", "icicle", "ice", "medusa", "ballspewer");
-            //var enemy = HXP.choose("ballspewer");
+            //var enemy = HXP.choose("spikeball", "icicle", "ice", "medusa", "ballspewer");
+            var enemy = HXP.choose("spiketrap");
             if(enemy == "spikeball") {
                 var trap = new SpikeBall(new Vector2(
                     openSpot.level.x + openSpot.tileX * Level.TILE_SIZE + Level.TILE_SIZE / 2,
@@ -281,7 +282,7 @@ class GameScene extends Scene
             }
             else if(enemy == "ice") {
                 var openSpot = openSpots["in_floor"].pop();
-                var iceRadius = ICE_RADIUS + HXP.choose(-2, 0, 2, 4);
+                var iceRadius = BASE_ICE_RADIUS + HXP.choose(-2, 0, 2, 4);
                 var tileStart = Std.int(Math.round(-iceRadius / 2));
                 var tileEnd = tileStart + iceRadius;
                 for(tileX in tileStart...tileEnd) {
@@ -315,6 +316,31 @@ class GameScene extends Scene
                 );
                 //openSpot.level.walls.setTile(openSpot.tileX, openSpot.tileY, false);
                 add(trap);
+            }
+            else if(enemy == "spiketrap") {
+                //var spikeTrapRadius = BASE_SPIKE_TRAP_RADIUS + HXP.choose(-4, -4, -2, 0, 2, 4);
+                var spikeTrapRadius = BASE_SPIKE_TRAP_RADIUS;
+                var openSpot = openSpots["in_floor"].pop();
+                var tileStart = Std.int(Math.round(-spikeTrapRadius / 2));
+                var tileEnd = tileStart + spikeTrapRadius;
+                for(tileX in tileStart...tileEnd) {
+                    for(tileY in tileStart...tileEnd) {
+                        if(
+                            openSpot.level.walls.getTile(
+                                openSpot.tileX + tileX, openSpot.tileY + tileY, false
+                            )
+                            && !openSpot.level.walls.getTile(
+                                openSpot.tileX + tileX, openSpot.tileY + tileY - 1, true
+                            )
+                        ) {
+                            var trap = new SpikeTrap(
+                                openSpot.level.x + (openSpot.tileX + tileX) * Level.TILE_SIZE,
+                                openSpot.level.y + (openSpot.tileY + tileY) * Level.TILE_SIZE
+                            );
+                            add(trap);
+                        }
+                    }
+                }
             }
         }
     }

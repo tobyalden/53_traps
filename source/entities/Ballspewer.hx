@@ -11,7 +11,7 @@ import scenes.*;
 
 class BallSpewer extends MiniEntity
 {
-    public static inline var SPEW_INTERVAL = 1;
+    public static inline var SPEW_INTERVAL = 1.5;
 
     private var sprite:Image;
     private var activated:Bool;
