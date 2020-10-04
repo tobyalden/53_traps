@@ -1,0 +1,14 @@
+- 2-4 more traps
+- remove conflicting traps
+- more hallways
+- lives
+- game over
+- checkpoints
+- main menu
+- end screen
+- graphics
+- sfx
+- music
+- make procgen consistent
+- daily lockout
+- improve camera(?)

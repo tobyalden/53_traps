@@ -248,6 +248,7 @@ class GameScene extends Scene
             "edges" => new Array<TileCoordinates>(),
             "on_ceiling" => new Array<TileCoordinates>(),
             "on_floor" => new Array<TileCoordinates>(),
+            "on_floor_with_headroom" => new Array<TileCoordinates>(),
             "in_floor" => new Array<TileCoordinates>(),
             "near_center" => new Array<TileCoordinates>(),
             "walls" => new Array<TileCoordinates>()
@@ -266,9 +267,9 @@ class GameScene extends Scene
             var openSpot = openSpots["edges"].pop();
             var enemy = HXP.choose(
                 "spikeball", "icicle", "ice", "medusa", "ballspewer",
-                "spiketrap", "spiketurtle"
+                "spiketrap", "spiketurtle", "jumper"
             );
-            //var enemy = HXP.choose("spiketurtle");
+            enemy = HXP.choose("jumper");
             if(enemy == "spikeball") {
                 var trap = new SpikeBall(new Vector2(
                     openSpot.level.x + openSpot.tileX * Level.TILE_SIZE + Level.TILE_SIZE / 2,
@@ -351,6 +352,14 @@ class GameScene extends Scene
                 var trap = new SpikeTurtle(
                     openSpot.level.x + openSpot.tileX * Level.TILE_SIZE,
                     openSpot.level.y + openSpot.tileY * Level.TILE_SIZE
+                );
+                add(trap);
+            }
+            else if(enemy == "jumper") {
+                var openSpot = openSpots["on_floor_with_headroom"].pop();
+                var trap = new Jumper(
+                    openSpot.level.x + openSpot.tileX * Level.TILE_SIZE,
+                    openSpot.level.y + openSpot.tileY * Level.TILE_SIZE - 2
                 );
                 add(trap);
             }

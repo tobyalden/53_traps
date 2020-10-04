@@ -140,6 +140,7 @@ class Level extends Entity
             "edges" => new Array<TileCoordinates>(),
             "on_ceiling" => new Array<TileCoordinates>(),
             "on_floor" => new Array<TileCoordinates>(),
+            "on_floor_with_headroom" => new Array<TileCoordinates>(),
             "in_floor" => new Array<TileCoordinates>(),
             "near_center" => new Array<TileCoordinates>(),
             "walls" => new Array<TileCoordinates>()
@@ -180,6 +181,21 @@ class Level extends Entity
                     && walls.getTile(tileX + 1, tileY + 1)
                 ) {
                     openSpots["on_floor"].push({tileX: tileX, tileY: tileY, level: this});
+                }
+                if(
+                    !walls.getTile(tileX, tileY)
+                    && !walls.getTile(tileX - 1, tileY)
+                    && !walls.getTile(tileX + 1, tileY)
+                    && walls.getTile(tileX, tileY + 1)
+                    && walls.getTile(tileX - 1, tileY + 1)
+                    && walls.getTile(tileX + 1, tileY + 1)
+                    && !walls.getTile(tileX, tileY - 1)
+                    && !walls.getTile(tileX, tileY - 2)
+                    && !walls.getTile(tileX, tileY - 3)
+                    && !walls.getTile(tileX, tileY - 4)
+                    && !walls.getTile(tileX, tileY - 5)
+                ) {
+                    openSpots["on_floor_with_headroom"].push({tileX: tileX, tileY: tileY, level: this});
                 }
                 if(
                     walls.getTile(tileX, tileY)
