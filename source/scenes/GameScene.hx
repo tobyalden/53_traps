@@ -247,6 +247,7 @@ class GameScene extends Scene
         openSpots = [
             "edges" => new Array<TileCoordinates>(),
             "on_ceiling" => new Array<TileCoordinates>(),
+            "on_floor" => new Array<TileCoordinates>(),
             "in_floor" => new Array<TileCoordinates>(),
             "near_center" => new Array<TileCoordinates>(),
             "walls" => new Array<TileCoordinates>()
@@ -263,8 +264,11 @@ class GameScene extends Scene
         }
         for(i in 0...NUMBER_OF_TRAPS) {
             var openSpot = openSpots["edges"].pop();
-            //var enemy = HXP.choose("spikeball", "icicle", "ice", "medusa", "ballspewer");
-            var enemy = HXP.choose("spiketrap");
+            var enemy = HXP.choose(
+                "spikeball", "icicle", "ice", "medusa", "ballspewer",
+                "spiketrap", "spiketurtle"
+            );
+            //var enemy = HXP.choose("spiketurtle");
             if(enemy == "spikeball") {
                 var trap = new SpikeBall(new Vector2(
                     openSpot.level.x + openSpot.tileX * Level.TILE_SIZE + Level.TILE_SIZE / 2,
@@ -342,6 +346,35 @@ class GameScene extends Scene
                     }
                 }
             }
+            else if(enemy == "spiketurtle") {
+                var openSpot = openSpots["on_floor"].pop();
+                var trap = new SpikeTurtle(
+                    openSpot.level.x + openSpot.tileX * Level.TILE_SIZE,
+                    openSpot.level.y + openSpot.tileY * Level.TILE_SIZE
+                );
+                add(trap);
+            }
         }
+
+        // Remove conflicting enemies
+        // TODO: maybe should just delete any that are touching...
+        //var spikeTraps = new Array<Entity>();
+        //getClass(SpikeTrap, spikeTraps);
+        //var iceBlocks = new Array<Entity>();
+        //getClass(IceBlock, iceBlocks);
+        //var ballSpewers = new Array<Entity>();
+        //getClass(BallSpewer, ballSpewers);
+        //for(iceBlock in iceBlocks) {
+            //for(spikeTrap in spikeTraps) {
+                //if(spikeTrap.collideWith(iceBlock, spikeTrap.x, spikeTrap.y) != null) {
+                    //remove(iceBlock);
+                //}
+            //}
+            //for(ballSpewer in ballSpewers) {
+                //if(ballSpewer.collideWith(iceBlock, ballSpewer.x, ballSpewer.y) != null) {
+                    //remove(iceBlock);
+                //}
+            //}
+        //}
     }
 }

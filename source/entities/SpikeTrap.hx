@@ -27,6 +27,7 @@ class SpikeTrap extends MiniEntity
         sprite.add("active", [2]);
         sprite.add("retracting", [1, 0], 12, false);
         sprite.play("idle");
+        sprite.alpha = 0.5;
         sprite.y = -10;
         graphic = sprite;
         mask = new Hitbox(10, 5, 0, -5);

@@ -23,7 +23,7 @@ class Player extends MiniEntity
     public static inline var MAX_AIR_SPEED = 160;
     public static inline var GRAVITY = 500;
     public static inline var JUMP_POWER = 160;
-    public static inline var CROUCH_JUMP_POWER = 100;
+    public static inline var CROUCH_JUMP_POWER = 120;
     public static inline var JUMP_CANCEL_POWER = 40;
     public static inline var MAX_FALL_SPEED = 270;
     public static inline var RUN_SPEED_APPLIED_TO_JUMP_POWER = 1 / 6;

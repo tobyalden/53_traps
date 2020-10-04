@@ -139,6 +139,7 @@ class Level extends Entity
         openSpots = [
             "edges" => new Array<TileCoordinates>(),
             "on_ceiling" => new Array<TileCoordinates>(),
+            "on_floor" => new Array<TileCoordinates>(),
             "in_floor" => new Array<TileCoordinates>(),
             "near_center" => new Array<TileCoordinates>(),
             "walls" => new Array<TileCoordinates>()
@@ -165,14 +166,24 @@ class Level extends Entity
                     !walls.getTile(tileX, tileY)
                     && walls.getTile(tileX, tileY - 1, true)
                     && !walls.getTile(tileX, tileY + 1, true)
+                    && !walls.getTile(tileX, tileY + 2, true)
                     && tileY != 0
                 ) {
                     openSpots["on_ceiling"].push({tileX: tileX, tileY: tileY, level: this});
                 }
                 if(
+                    !walls.getTile(tileX, tileY)
+                    && !walls.getTile(tileX - 1, tileY)
+                    && !walls.getTile(tileX + 1, tileY)
+                    && walls.getTile(tileX, tileY + 1)
+                    && walls.getTile(tileX - 1, tileY + 1)
+                    && walls.getTile(tileX + 1, tileY + 1)
+                ) {
+                    openSpots["on_floor"].push({tileX: tileX, tileY: tileY, level: this});
+                }
+                if(
                     walls.getTile(tileX, tileY)
                     && !walls.getTile(tileX, tileY - 1, true)
-                    //&& tileY != 0
                 ) {
                     openSpots["in_floor"].push({tileX: tileX, tileY: tileY, level: this});
                 }
@@ -248,9 +259,9 @@ class Level extends Entity
                 if(walls.getTile(tileX, tileY)) {
                     tiles.setTile(tileX, tileY, 0);
                 }
-                if(hasOpenSpot("walls", tileX, tileY)) {
-                    tiles.setTile(tileX, tileY, 1);
-                }
+                //if(hasOpenSpot("on_floor", tileX, tileY)) {
+                    //tiles.setTile(tileX, tileY, 1);
+                //}
             }
         }
         graphic = tiles;
