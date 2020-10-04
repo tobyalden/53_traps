@@ -318,8 +318,8 @@ class GameScene extends Scene
                 add(trap);
             }
             else if(enemy == "spiketrap") {
-                //var spikeTrapRadius = BASE_SPIKE_TRAP_RADIUS + HXP.choose(-4, -4, -2, 0, 2, 4);
-                var spikeTrapRadius = BASE_SPIKE_TRAP_RADIUS;
+                var spikeTrapRadius = BASE_SPIKE_TRAP_RADIUS + HXP.choose(-2, -1, 0, 1, 2);
+                //var spikeTrapRadius = BASE_SPIKE_TRAP_RADIUS;
                 var openSpot = openSpots["in_floor"].pop();
                 var tileStart = Std.int(Math.round(-spikeTrapRadius / 2));
                 var tileEnd = tileStart + spikeTrapRadius;
@@ -327,7 +327,7 @@ class GameScene extends Scene
                     for(tileY in tileStart...tileEnd) {
                         if(
                             openSpot.level.walls.getTile(
-                                openSpot.tileX + tileX, openSpot.tileY + tileY, false
+                                openSpot.tileX + tileX, openSpot.tileY + tileY
                             )
                             && !openSpot.level.walls.getTile(
                                 openSpot.tileX + tileX, openSpot.tileY + tileY - 1, true

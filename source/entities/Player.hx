@@ -41,6 +41,7 @@ class Player extends MiniEntity
     public function new(x:Float, y:Float) {
         super(x, y);
         name = "player";
+        type = "player";
         layer = -3;
         sprite = new Spritemap("graphics/player.png", 8, 12);
         sprite.add("idle", [0]);
