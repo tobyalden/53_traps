@@ -21,7 +21,7 @@ class Particle extends MiniEntity
         sprite.add(
             "idle",
             [0, 1, 2, 3],
-            Std.int(Math.random() * 4 + 2),
+            Std.int(Random.random * 4 + 2),
             false
         );
         sprite.play("idle");

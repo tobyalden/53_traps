@@ -27,7 +27,7 @@ class Medusa extends MiniEntity
         sprite = new Image("graphics/medusa.png");
         graphic = sprite;
         mask = new Hitbox(15, 15);
-        age = Math.random() * Math.PI * 2;
+        age = Random.random * Math.PI * 2;
         startY = y;
         activated = false;
     }

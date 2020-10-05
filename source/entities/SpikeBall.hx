@@ -24,7 +24,7 @@ class SpikeBall extends MiniEntity
         type = "hazard";
         //sprite = new Image("graphics/orb.png");
         //graphic = sprite;
-        age = Math.random() * Math.PI * 2;
+        age = Random.random * Math.PI * 2;
         //radius = 6 + Random.randInt(3);
         //orbitRadius = 25 + Random.randInt(25);
         //orbitSpeed = 2 + Random.randInt(4);

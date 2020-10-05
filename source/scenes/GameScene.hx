@@ -16,7 +16,10 @@ import entities.Level;
 class GameScene extends Scene
 {
     public static inline var MAP_TILE_SIZE = 16;
-    public static inline var NUMBER_OF_TRAPS = 50;
+    //public static inline var NUMBER_OF_TRAPS = 10;
+    //public static inline var NUMBER_OF_TRAPS = 25;
+    //public static inline var NUMBER_OF_TRAPS = 50;
+    public static inline var NUMBER_OF_TRAPS = 100;
     public static inline var BASE_ICE_RADIUS = 9;
     public static inline var BASE_SPIKE_TRAP_RADIUS = 5;
 
@@ -34,6 +37,7 @@ class GameScene extends Scene
     public var openSpots(default, null):Map<String, Array<TileCoordinates>>;
 
     override public function begin() {
+        Random.randomSeed = 99;
         curtain = add(new Curtain());
         curtain.fadeOut(1);
         loadMaps(0);
@@ -269,7 +273,7 @@ class GameScene extends Scene
                 "spikeball", "icicle", "ice", "medusa", "ballspewer",
                 "spiketrap", "spiketurtle", "jumper"
             );
-            enemy = HXP.choose("jumper");
+            //enemy = HXP.choose("jumper");
             if(enemy == "spikeball") {
                 var trap = new SpikeBall(new Vector2(
                     openSpot.level.x + openSpot.tileX * Level.TILE_SIZE + Level.TILE_SIZE / 2,

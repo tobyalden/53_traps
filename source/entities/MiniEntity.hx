@@ -51,9 +51,9 @@ class MiniEntity extends Entity
         }
         var count = 0;
         for(direction in directions) {
-            direction.scale(0.8 * Math.random());
+            direction.scale(0.8 * Random.random);
             direction.normalize(
-                Math.max(0.1 + 0.2 * Math.random(), direction.length)
+                Math.max(0.1 + 0.2 * Random.random, direction.length)
             );
             var explosion = new Particle(
                 centerX, centerY, directions[count], 1, 1

@@ -1,4 +1,6 @@
-- 2-4 more traps
++ 2-4 more traps
++ make procgen consistent
+- add health
 - remove conflicting traps
 - more hallways
 - lives
@@ -9,6 +11,5 @@
 - graphics
 - sfx
 - music
-- make procgen consistent
 - daily lockout
 - improve camera(?)
