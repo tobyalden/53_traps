@@ -1,5 +1,3 @@
-+ 2-4 more traps
-+ make procgen consistent
 - add health
 - remove conflicting traps
 - more hallways

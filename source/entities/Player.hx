@@ -27,6 +27,7 @@ class Player extends MiniEntity
     public static inline var JUMP_CANCEL_POWER = 40;
     public static inline var MAX_FALL_SPEED = 270;
     public static inline var RUN_SPEED_APPLIED_TO_JUMP_POWER = 1 / 6;
+    public static inline var INVINCIBLE_TIME = 2;
 
     public static var sfx:Map<String, Sfx> = null;
 
@@ -37,6 +38,8 @@ class Player extends MiniEntity
     private var wasCrouching:Bool;
     private var canMove:Bool;
     private var hitbox:Hitbox;
+    private var health:Int;
+    private var invincibleTimer:Alarm;
 
     public function new(x:Float, y:Float) {
         super(x, y);
@@ -59,6 +62,9 @@ class Player extends MiniEntity
         isDead = false;
         isCrouching = false;
         wasCrouching = false;
+        health = 3;
+        invincibleTimer = new Alarm(INVINCIBLE_TIME);
+        addTween(invincibleTimer);
         canMove = false;
         var allowMove = new Alarm(0.2, function() {
             canMove = true;
@@ -71,7 +77,8 @@ class Player extends MiniEntity
                 "run" => new Sfx("audio/run.wav"),
                 "skid" => new Sfx("audio/skid.wav"),
                 "die" => new Sfx("audio/die.wav"),
-                "save" => new Sfx("audio/save.wav")
+                "save" => new Sfx("audio/save.wav"),
+                "takehit" => new Sfx("audio/takehit.wav")
             ];
         }
     }
@@ -93,8 +100,23 @@ class Player extends MiniEntity
 
     private function collisions() {
         if(collide("hazard", x, y) != null) {
+            takeHit();
+        }
+    }
+
+    private function takeHit() {
+        if(invincibleTimer.active) {
+            return;
+        }
+        health -= 1;
+        if(health == 0) {
             die();
         }
+        else {
+            sfx["takehit"].play();
+            cast(scene, GameScene).pause(1);
+        }
+        invincibleTimer.start();
     }
 
     private function stopSounds() {
@@ -204,6 +226,13 @@ class Player extends MiniEntity
     }
 
     private function animation() {
+        if(invincibleTimer.active) {
+            trace(invincibleTimer.percent);
+            sprite.visible = Math.round(invincibleTimer.percent * 100) % 2 == 0;
+        }
+        else {
+            sprite.visible = true;
+        }
         if(!canMove) {
             if(isOnGround()) {
                 sprite.play("idle");

@@ -27,6 +27,7 @@ class GameScene extends Scene
     public static var sfx:Map<String, Sfx> = null;
 
     public var curtain(default, null):Curtain;
+    public var openSpots(default, null):Map<String, Array<TileCoordinates>>;
     private var roomMapBlueprint:Grid;
     private var hallwayMapBlueprint:Grid;
     private var shaftMapBlueprint:Grid;
@@ -34,7 +35,7 @@ class GameScene extends Scene
     private var map:Grid;
     private var allLevels:Array<Level>;
     private var player:Player;
-    public var openSpots(default, null):Map<String, Array<TileCoordinates>>;
+    private var pauseTimer:Alarm;
 
     override public function begin() {
         Random.randomSeed = 99;
@@ -48,9 +49,26 @@ class GameScene extends Scene
                 "restart" => new Sfx("audio/restart.wav")
             ];
         }
+        pauseTimer = new Alarm(1, function() {
+            var allEntities = new Array<Entity>();
+            getAll(allEntities);
+            for(entity in allEntities) {
+                entity.active = true;
+            }
+        });
+        addTween(pauseTimer);
     }
 
     static public function stopAmbience() {
+    }
+
+    public function pause(pauseDuration:Float) {
+        var allEntities = new Array<Entity>();
+        getAll(allEntities);
+        for(entity in allEntities) {
+            entity.active = false;
+        }
+        pauseTimer.reset(pauseDuration);
     }
 
     override public function update() {
