@@ -28,6 +28,7 @@ class Player extends MiniEntity
     public static inline var MAX_FALL_SPEED = 270;
     public static inline var RUN_SPEED_APPLIED_TO_JUMP_POWER = 1 / 6;
     public static inline var INVINCIBLE_TIME = 2;
+    public static inline var MAX_HEALTH = 2;
 
     public static var sfx:Map<String, Sfx> = null;
 
@@ -52,6 +53,11 @@ class Player extends MiniEntity
         sprite.add("jump", [4]);
         sprite.add("skid", [6]);
         sprite.add("crouch", [19]);
+        sprite.add("idle_underwear", [10]);
+        sprite.add("run_underwear", [11, 12, 13, 12], 8);
+        sprite.add("jump_underwear", [14]);
+        sprite.add("skid_underwear", [16]);
+        sprite.add("crouch_underwear", [18]);
         sprite.play("idle");
         hitbox = new Hitbox(6, 12);
         mask = hitbox;
@@ -62,7 +68,7 @@ class Player extends MiniEntity
         isDead = false;
         isCrouching = false;
         wasCrouching = false;
-        health = 3;
+        health = MAX_HEALTH;
         invincibleTimer = new Alarm(INVINCIBLE_TIME);
         addTween(invincibleTimer);
         canMove = false;
@@ -226,6 +232,7 @@ class Player extends MiniEntity
     }
 
     private function animation() {
+        var animationSuffix = health == 2 ? "" : "_underwear";
         if(invincibleTimer.active) {
             trace(invincibleTimer.percent);
             sprite.visible = Math.round(invincibleTimer.percent * 100) % 2 == 0;
@@ -235,17 +242,17 @@ class Player extends MiniEntity
         }
         if(!canMove) {
             if(isOnGround()) {
-                sprite.play("idle");
+                sprite.play("idle" + animationSuffix);
             }
             else {
-                sprite.play("jump");
+                sprite.play("jump" + animationSuffix);
             }
         }
         else if(isCrouching) {
-            sprite.play("crouch");
+            sprite.play("crouch" + animationSuffix);
         }
         else if(!isOnGround()) {
-            sprite.play("jump");
+            sprite.play("jump" + animationSuffix);
             if(velocity.x < 0) {
                 sprite.flipX = true;
             }
@@ -259,18 +266,18 @@ class Player extends MiniEntity
                 || velocity.x < 0 && Main.inputCheck("right"))
                 && !isOnIce()
             ) {
-                sprite.play("skid");
+                sprite.play("skid" + animationSuffix);
                 if(!sfx["skid"].playing) {
                     sfx["skid"].play();
                 }
             }
             else {
-                sprite.play("run");
+                sprite.play("run" + animationSuffix);
             }
             sprite.flipX = velocity.x < 0;
         }
         else {
-            sprite.play("idle");
+            sprite.play("idle" + animationSuffix);
         }
     }
 

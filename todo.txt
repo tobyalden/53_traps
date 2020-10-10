@@ -1,4 +1,4 @@
-- add health
++ add health
 - remove conflicting traps
 - more hallways
 - lives
