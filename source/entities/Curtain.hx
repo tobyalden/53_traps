@@ -10,31 +10,27 @@ import scenes.*;
 class Curtain extends MiniEntity
 {
     static public var sprite:ColoredRect;
-    private var fader:VarTween;
 
     public function new() {
         super(0, 0);
         sprite = new ColoredRect(HXP.width, HXP.height, 0x000000);
         sprite.scrollX = 0;
         sprite.scrollY = 0;
+        sprite.alpha = 0;
         graphic = sprite;
         layer = -999;
-        fader = new VarTween();
-        addTween(fader);
     }
 
     override public function update() {
         super.update();
     }
 
-    public function fadeOut(fadeTime:Float) {
-        //fader.tween(sprite, "alpha", 0, fadeTime, Ease.sineOut);
-        fader.tween(sprite, "alpha", 0, fadeTime);
+    public function fadeOut() {
+        sprite.alpha = 0;
     }
 
-    public function fadeIn(fadeTime:Float) {
-        //fader.tween(sprite, "alpha", 1, fadeTime, Ease.sineIn);
-        fader.tween(sprite, "alpha", 1, fadeTime);
+    public function fadeIn() {
+        sprite.alpha = 1;
     }
 }
 

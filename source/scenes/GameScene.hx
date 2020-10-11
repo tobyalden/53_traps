@@ -40,7 +40,6 @@ class GameScene extends Scene
     override public function begin() {
         Random.randomSeed = 99;
         curtain = add(new Curtain());
-        curtain.fadeOut(1);
         loadMaps(0);
         placeLevels();
         placeTraps();
@@ -66,6 +65,9 @@ class GameScene extends Scene
         var allEntities = new Array<Entity>();
         getAll(allEntities);
         for(entity in allEntities) {
+            if(entity == curtain) {
+                continue;
+            }
             entity.active = false;
         }
         pauseTimer.reset(pauseDuration);

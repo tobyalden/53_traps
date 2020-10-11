@@ -28,7 +28,7 @@ class Player extends MiniEntity
     public static inline var MAX_FALL_SPEED = 270;
     public static inline var RUN_SPEED_APPLIED_TO_JUMP_POWER = 1 / 6;
     public static inline var INVINCIBLE_TIME = 2;
-    public static inline var MAX_HEALTH = 2;
+    public static inline var MAX_HEALTH = 3;
 
     public static var sfx:Map<String, Sfx> = null;
 
@@ -58,6 +58,11 @@ class Player extends MiniEntity
         sprite.add("jump_underwear", [14]);
         sprite.add("skid_underwear", [16]);
         sprite.add("crouch_underwear", [18]);
+        sprite.add("idle_naked", [20]);
+        sprite.add("run_naked", [21, 22, 23, 22], 8);
+        sprite.add("jump_naked", [24]);
+        sprite.add("skid_naked", [26]);
+        sprite.add("crouch_naked", [17]);
         sprite.play("idle");
         hitbox = new Hitbox(6, 12);
         mask = hitbox;
@@ -115,14 +120,22 @@ class Player extends MiniEntity
             return;
         }
         health -= 1;
+        sfx["takehit"].play();
+        animation();
+        cast(scene, GameScene).pause(1);
         if(health == 0) {
-            die();
+            HXP.alarm(1, function() {
+                die();
+            });
         }
         else {
-            sfx["takehit"].play();
-            cast(scene, GameScene).pause(1);
+            tossClothes(health == 2 ? "dress" : "underwear");
         }
         invincibleTimer.start();
+    }
+
+    private function tossClothes(clothesName:String) {
+        scene.add(new Clothes(this, clothesName));
     }
 
     private function stopSounds() {
@@ -137,14 +150,13 @@ class Player extends MiniEntity
         explode();
         stopSounds();
         sfx["die"].play(0.8);
-        var fadeOut = new Alarm(0.25, function() {
-            cast(HXP.scene, GameScene).curtain.fadeIn(0.25);
-            var reset = new Alarm(0.25, function() {
+        HXP.alarm(3, function() {
+            cast(scene, GameScene).curtain.fadeIn();
+            HXP.alarm(2, function() {
+                trace('restarting');
                 HXP.scene = new GameScene();
             });
-            addTween(reset, true);
         });
-        addTween(fadeOut, true);
     }
 
     private function movement() {
@@ -232,9 +244,14 @@ class Player extends MiniEntity
     }
 
     private function animation() {
-        var animationSuffix = health == 2 ? "" : "_underwear";
+        var animationSuffix = "_naked";
+        if(health == 3) {
+            animationSuffix = "";
+        }
+        else if(health == 2) {
+            animationSuffix = "_underwear";
+        }
         if(invincibleTimer.active) {
-            trace(invincibleTimer.percent);
             sprite.visible = Math.round(invincibleTimer.percent * 100) % 2 == 0;
         }
         else {

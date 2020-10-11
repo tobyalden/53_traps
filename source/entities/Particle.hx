@@ -27,9 +27,9 @@ class Particle extends MiniEntity
         sprite.play("idle");
         sprite.centerOrigin();
         sprite.scale = scale;
-        var fadeTween = new MultiVarTween();
-        fadeTween.tween(sprite, {"alpha": 0}, fadeTime);
-        addTween(fadeTween, true);
+        //var fadeTween = new MultiVarTween();
+        //fadeTween.tween(sprite, {"alpha": 0}, fadeTime);
+        //addTween(fadeTween, true);
         graphic = sprite;
     }
 
