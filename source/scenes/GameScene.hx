@@ -58,6 +58,15 @@ class GameScene extends Scene
         addTween(pauseTimer);
     }
 
+    public function onDeath() {
+        HXP.alarm(4, function() {
+            curtain.fadeIn();
+            HXP.alarm(2, function() {
+                HXP.scene = new FloorTitle();
+            });
+        });
+    }
+
     static public function stopAmbience() {
     }
 

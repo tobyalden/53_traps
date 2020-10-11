@@ -13,15 +13,15 @@ class Curtain extends MiniEntity
 
     public function new() {
         super(0, 0);
-        sprite = new ColoredRect(HXP.width, HXP.height, 0x000000);
-        sprite.scrollX = 0;
-        sprite.scrollY = 0;
+        sprite = new ColoredRect(HXP.width * 4, HXP.height * 4, 0x000000);
         sprite.alpha = 0;
         graphic = sprite;
         layer = -999;
     }
 
     override public function update() {
+        x = scene.camera.x - HXP.width;
+        y = scene.camera.y - HXP.height;
         super.update();
     }
 

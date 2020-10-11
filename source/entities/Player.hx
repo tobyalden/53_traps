@@ -150,13 +150,7 @@ class Player extends MiniEntity
         explode();
         stopSounds();
         sfx["die"].play(0.8);
-        HXP.alarm(3, function() {
-            cast(scene, GameScene).curtain.fadeIn();
-            HXP.alarm(2, function() {
-                trace('restarting');
-                HXP.scene = new GameScene();
-            });
-        });
+        cast(scene, GameScene).onDeath();
     }
 
     private function movement() {
