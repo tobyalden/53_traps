@@ -16,15 +16,19 @@ import entities.Level;
 class GameScene extends Scene
 {
     public static inline var MAP_TILE_SIZE = 16;
-    public static inline var MIN_NUMBER_OF_TRAPS = 10;
-    public static inline var MAX_NUMBER_OF_TRAPS = 100;
+    //public static inline var MIN_NUMBER_OF_TRAPS = 25;
+    //public static inline var MAX_NUMBER_OF_TRAPS = 100;
+    public static inline var MIN_NUMBER_OF_TRAPS = 0;
+    public static inline var MAX_NUMBER_OF_TRAPS = 0;
+    public static inline var BASE_NUMBER_OF_HALLWAYS = 10;
+    public static inline var NUMBER_OF_FLOORS = 9;
     public static inline var BASE_ICE_RADIUS = 9;
     public static inline var BASE_SPIKE_TRAP_RADIUS = 5;
 
     public static var currentCheckpoint:Vector2 = null;
     public static var sfx:Map<String, Sfx> = null;
 
-    public static var lives:Int = 3;
+    public static var lives:Int = 99;
     public static var floorNumber:Int = 1;
 
     public var curtain(default, null):Curtain;
@@ -57,6 +61,22 @@ class GameScene extends Scene
             }
         });
         addTween(pauseTimer);
+    }
+
+    public function onExit() {
+        pause(99);
+        HXP.alarm(1.5, function() {
+            curtain.fadeIn();
+        });
+        HXP.alarm(3, function() {
+            if(floorNumber == NUMBER_OF_FLOORS) {
+                HXP.scene = new GameOver(true);
+            }
+            else {
+                floorNumber += 1;
+                HXP.scene = new FloorTitle();
+            }
+        });
     }
 
     public function onDeath() {
@@ -106,7 +126,7 @@ class GameScene extends Scene
     }
 
     private function loadMaps(mapNumber:Int) {
-        var mapPath = 'maps/${'test'}.oel';
+        var mapPath = 'maps/0.oel';
         var xml = Xml.parse(Assets.getText(mapPath));
         var fastXml = new haxe.xml.Fast(xml.firstElement());
         var mapWidth = Std.parseInt(fastXml.node.width.innerData);
@@ -300,7 +320,11 @@ class GameScene extends Scene
         for(spotType in openSpots.keys()) {
             HXP.shuffle(openSpots[spotType]);
         }
-        var numberOfTraps = MathUtil.ilerp(MIN_NUMBER_OF_TRAPS, MAX_NUMBER_OF_TRAPS, floorNumber / 99);
+        var numberOfTraps = MathUtil.ilerp(
+            MIN_NUMBER_OF_TRAPS,
+            MAX_NUMBER_OF_TRAPS,
+            floorNumber / NUMBER_OF_FLOORS
+        );
         for(i in 0...numberOfTraps) {
             var openSpot = openSpots["edges"].pop();
             var enemy = HXP.choose(

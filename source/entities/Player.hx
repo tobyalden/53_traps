@@ -113,6 +113,10 @@ class Player extends MiniEntity
         if(collide("hazard", x, y) != null) {
             takeHit();
         }
+        if(collide("exit", x, y) != null) {
+            collidable = false;
+            cast(scene, GameScene).onExit();
+        }
     }
 
     private function takeHit() {

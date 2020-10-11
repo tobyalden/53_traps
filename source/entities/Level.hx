@@ -111,7 +111,7 @@ class Level extends Entity
             }
         }
 
-        // Load player
+        // Load entities
         entities = new Array<MiniEntity>();
         if(fastXml.hasNode.objects) {
             for(e in fastXml.node.objects.nodes.player) {
@@ -119,6 +119,13 @@ class Level extends Entity
                     Std.parseInt(e.att.x), Std.parseInt(e.att.y) + 8
                 );
                 entities.push(player);
+                break;
+            }
+            for(e in fastXml.node.objects.nodes.exit) {
+                var exit = new Exit(
+                    Std.parseInt(e.att.x), Std.parseInt(e.att.y)
+                );
+                entities.push(exit);
                 break;
             }
         }
@@ -133,7 +140,7 @@ class Level extends Entity
             "near_center" => new Array<TileCoordinates>(),
             "walls" => new Array<TileCoordinates>()
         ];
-        if(levelType == "start") {
+        if(levelType == "start" || levelType == "end") {
             return;
         }
         for(tileX in 0...walls.columns) {

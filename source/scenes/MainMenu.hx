@@ -65,7 +65,7 @@ class MainMenu extends Scene
             flasher.tween(message, 'alpha', 0, 0.1, Ease.sineInOut);
             var reset = new Alarm(1, function() {
                 GameScene.lives = 99;
-                GameScene.floorNumber = 1;
+                GameScene.floorNumber = GameScene.NUMBER_OF_FLOORS;
                 HXP.scene = new FloorTitle();
             });
             addTween(reset, true);

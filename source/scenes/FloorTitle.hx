@@ -22,7 +22,7 @@ class FloorTitle extends Scene
     override public function begin() {
         curtain = add(new Curtain());
         var playerIcon = new Image("graphics/player_icon.png");
-        addGraphic(playerIcon, 0, HXP.width / 2 - 25, HXP.height / 2 - 9);
+        addGraphic(playerIcon, 0, HXP.width / 2 - 30, HXP.height / 2 - 9);
         var message = new Text(
             'x ${GameScene.lives}',
             0, HXP.height / 2 - 10, HXP.width, 0,
