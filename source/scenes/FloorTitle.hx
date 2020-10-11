@@ -24,12 +24,19 @@ class FloorTitle extends Scene
         var playerIcon = new Image("graphics/player_icon.png");
         addGraphic(playerIcon, 0, HXP.width / 2 - 25, HXP.height / 2 - 9);
         var message = new Text(
-            'x 3',
+            'x ${GameScene.lives}',
             0, HXP.height / 2 - 10, HXP.width, 0,
             {color: 0xFFFFFF, align: TextAlignType.CENTER, leading: 0}
         );
         message.font = "font/CompassGold.ttf";
         addGraphic(message);
+        var message2 = new Text(
+            'FLOOR ${GameScene.floorNumber}',
+            -7, HXP.height / 2 - 50, HXP.width, 0,
+            {color: 0xFFFFFF, align: TextAlignType.CENTER, leading: 0}
+        );
+        message2.font = "font/CompassGold.ttf";
+        addGraphic(message2);
         if(sfx == null) {
             sfx = [
                 "start" => new Sfx("audio/start.wav")
@@ -37,7 +44,7 @@ class FloorTitle extends Scene
         }
         HXP.alarm(2, function() {
             curtain.fadeIn();
-            HXP.alarm(1, function() {
+            HXP.alarm(0.5, function() {
                 HXP.scene = new GameScene();
             });
         });

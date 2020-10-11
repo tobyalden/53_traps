@@ -28,7 +28,7 @@ class MainMenu extends Scene
     override public function begin() {
         addGraphic(new Image("graphics/mainmenu.png"), 1);
         curtain = add(new Curtain());
-        curtain.fadeOut(1);
+        curtain.fadeOut();
         message = new Text(
             'Press Z or Space',
             0, 120, 180, 180,
@@ -60,7 +60,7 @@ class MainMenu extends Scene
     override public function update() {
         if(canMove && Main.inputPressed("jump")) {
             canMove = false;
-            curtain.fadeIn(1);
+            curtain.fadeIn();
             flasher.tween(message, 'alpha', 0, 0.1, Ease.sineInOut);
             var reset = new Alarm(1, function() {
                 GameScene.currentCheckpoint = null;

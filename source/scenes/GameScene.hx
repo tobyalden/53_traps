@@ -26,6 +26,9 @@ class GameScene extends Scene
     public static var currentCheckpoint:Vector2 = null;
     public static var sfx:Map<String, Sfx> = null;
 
+    public static var lives:Int = 3;
+    public static var floorNumber:Int = 99;
+
     public var curtain(default, null):Curtain;
     public var openSpots(default, null):Map<String, Array<TileCoordinates>>;
     private var roomMapBlueprint:Grid;
@@ -38,7 +41,7 @@ class GameScene extends Scene
     private var pauseTimer:Alarm;
 
     override public function begin() {
-        Random.randomSeed = 99;
+        Random.randomSeed = floorNumber;
         curtain = add(new Curtain());
         loadMaps(0);
         placeLevels();
@@ -59,10 +62,16 @@ class GameScene extends Scene
     }
 
     public function onDeath() {
-        HXP.alarm(4, function() {
+        lives -= 1;
+        HXP.alarm(3.5, function() {
             curtain.fadeIn();
-            HXP.alarm(2, function() {
-                HXP.scene = new FloorTitle();
+            HXP.alarm(0.5, function() {
+                if(lives == 0) {
+                    HXP.scene = new MainMenu();
+                }
+                else {
+                    HXP.scene = new FloorTitle();
+                }
             });
         });
     }
