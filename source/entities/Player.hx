@@ -46,7 +46,7 @@ class Player extends MiniEntity
         super(x, y);
         name = "player";
         type = "player";
-        layer = -3;
+        layer = -10;
         sprite = new Spritemap("graphics/player.png", 8, 12);
         sprite.add("idle", [0]);
         sprite.add("run", [1, 2, 3, 2], 8);

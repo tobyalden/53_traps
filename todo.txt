@@ -1,13 +1,11 @@
-+ add health
-- remove conflicting traps
-- more hallways
-- lives
-- game over
-- checkpoints
-- main menu
+mvp: 
+- level end
 - end screen
+
+real deal:
+- more hallways
 - graphics
 - sfx
 - music
-- daily lockout
 - improve camera(?)
+- remove conflicting traps

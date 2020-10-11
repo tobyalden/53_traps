@@ -8,9 +8,9 @@
 		<workingDirectory>.</workingDirectory>
 	</settings>
 	<layers>
-		<grid name="rooms" gridSize="16" exportAsObjects="true"/>
 		<grid name="hallways" gridSize="16" exportAsObjects="true" color="#FF00FF00"/>
-		<grid name="shafts" gridSize="16" exportAsObjects="true" color="#FFA020F0"/>
+		<grid name="start" gridSize="16" exportAsObjects="true" color="#FFA020F0"/>
+		<grid name="end" gridSize="16" exportAsObjects="true" color="#FFfdd5b1"/>
 	</layers>
 </project>
 

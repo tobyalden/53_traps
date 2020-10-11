@@ -1,10 +1,13 @@
 <level>
-  <width>1600</width>
+  <width>320</width>
   <height>16</height>
-  <rooms>
-    <rect x="0" y="0" w="16" h="16"/>
-  </rooms>
   <hallways>
     <rect x="16" y="0" w="160" h="16"/>
   </hallways>
+  <start>
+    <rect x="0" y="0" w="16" h="16"/>
+  </start>
+  <end>
+    <rect x="176" y="0" w="16" h="16"/>
+  </end>
 </level>

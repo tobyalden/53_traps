@@ -25,13 +25,13 @@ class GameScene extends Scene
     public static var sfx:Map<String, Sfx> = null;
 
     public static var lives:Int = 3;
-    public static var floorNumber:Int = 99;
+    public static var floorNumber:Int = 1;
 
     public var curtain(default, null):Curtain;
     public var openSpots(default, null):Map<String, Array<TileCoordinates>>;
-    private var roomMapBlueprint:Grid;
+    private var startMapBlueprint:Grid;
     private var hallwayMapBlueprint:Grid;
-    private var shaftMapBlueprint:Grid;
+    private var endMapBlueprint:Grid;
     private var allBlueprint:Grid;
     private var map:Grid;
     private var allLevels:Array<Level>;
@@ -112,21 +112,21 @@ class GameScene extends Scene
         var mapWidth = Std.parseInt(fastXml.node.width.innerData);
         var mapHeight = Std.parseInt(fastXml.node.height.innerData);
         map = new Grid(mapWidth, mapHeight, MAP_TILE_SIZE, MAP_TILE_SIZE);
-        roomMapBlueprint = new Grid(
+        startMapBlueprint = new Grid(
             mapWidth, mapHeight, MAP_TILE_SIZE, MAP_TILE_SIZE
         );
         hallwayMapBlueprint = new Grid(
             mapWidth, mapHeight, MAP_TILE_SIZE, MAP_TILE_SIZE
         );
-        shaftMapBlueprint = new Grid(
+        endMapBlueprint = new Grid(
             mapWidth, mapHeight, MAP_TILE_SIZE, MAP_TILE_SIZE
         );
         allBlueprint = new Grid(
             mapWidth, mapHeight, MAP_TILE_SIZE, MAP_TILE_SIZE
         );
-        if(fastXml.hasNode.rooms) {
-            for (r in fastXml.node.rooms.nodes.rect) {
-                roomMapBlueprint.setRect(
+        if(fastXml.hasNode.start) {
+            for (r in fastXml.node.start.nodes.rect) {
+                startMapBlueprint.setRect(
                     Std.int(Std.parseInt(r.att.x) / MAP_TILE_SIZE),
                     Std.int(Std.parseInt(r.att.y) / MAP_TILE_SIZE),
                     Std.int(Std.parseInt(r.att.w) / MAP_TILE_SIZE),
@@ -156,9 +156,9 @@ class GameScene extends Scene
                 );
             }
         }
-        if(fastXml.hasNode.shafts) {
-            for (r in fastXml.node.shafts.nodes.rect) {
-                shaftMapBlueprint.setRect(
+        if(fastXml.hasNode.end) {
+            for (r in fastXml.node.end.nodes.rect) {
+                endMapBlueprint.setRect(
                     Std.int(Std.parseInt(r.att.x) / MAP_TILE_SIZE),
                     Std.int(Std.parseInt(r.att.y) / MAP_TILE_SIZE),
                     Std.int(Std.parseInt(r.att.w) / MAP_TILE_SIZE),
@@ -178,38 +178,37 @@ class GameScene extends Scene
         level:Level, tileX:Int, tileY:Int, checkX:Int, checkY:Int
     ) {
         if(
-            !roomMapBlueprint.getTile(tileX + checkX - 1, tileY + checkY)
+            !startMapBlueprint.getTile(tileX + checkX - 1, tileY + checkY)
             && !hallwayMapBlueprint.getTile(tileX + checkX - 1, tileY + checkY)
         ) {
             level.fillLeft(checkY);
         }
         if(
-            !roomMapBlueprint.getTile(tileX + checkX + 1, tileY + checkY)
+            !startMapBlueprint.getTile(tileX + checkX + 1, tileY + checkY)
             && !hallwayMapBlueprint.getTile(tileX + checkX + 1, tileY + checkY)
         ) {
             level.fillRight(checkY);
         }
         if(
-            !roomMapBlueprint.getTile(tileX + checkX, tileY + checkY - 1)
-            && !shaftMapBlueprint.getTile(tileX + checkX, tileY + checkY - 1)
+            !startMapBlueprint.getTile(tileX + checkX, tileY + checkY - 1)
+            && !endMapBlueprint.getTile(tileX + checkX, tileY + checkY - 1)
         ) {
             level.fillTop(checkX);
         }
         if(
-            !roomMapBlueprint.getTile(tileX + checkX, tileY + checkY + 1)
-            && !shaftMapBlueprint.getTile(tileX + checkX, tileY + checkY + 1)
+            !startMapBlueprint.getTile(tileX + checkX, tileY + checkY + 1)
+            && !endMapBlueprint.getTile(tileX + checkX, tileY + checkY + 1)
         ) {
             level.fillBottom(checkX);
         }
     }
 
     private function placeLevels() {
-        var placedStart = false;
         allLevels = new Array<Level>();
-        var levelTypes = ["room", "hallway", "shaft"];
+        var levelTypes = ["start", "hallway", "end"];
         var count = 0;
         for(mapBlueprint in [
-            roomMapBlueprint, hallwayMapBlueprint, shaftMapBlueprint
+            startMapBlueprint, hallwayMapBlueprint, endMapBlueprint
         ]) {
             for(tileX in 0...mapBlueprint.columns) {
                 for(tileY in 0...mapBlueprint.rows) {
@@ -220,10 +219,6 @@ class GameScene extends Scene
                         var canPlace = false;
                         while(!canPlace) {
                             var levelType = levelTypes[count];
-                            if(count == 0 && !placedStart) {
-                                levelType = "start";
-                                placedStart = true;
-                            }
                             var level = new Level(
                                 tileX * Level.MIN_LEVEL_WIDTH,
                                 tileY * Level.MIN_LEVEL_HEIGHT,
@@ -295,8 +290,10 @@ class GameScene extends Scene
         ];
         for(level in allLevels) {
             for(spotType in level.openSpots.keys()) {
-                for(openSpot in level.openSpots[spotType]) {
-                    openSpots[spotType].push(openSpot);
+                if(level.openSpots.exists(spotType)) {
+                    for(openSpot in level.openSpots[spotType]) {
+                        openSpots[spotType].push(openSpot);
+                    }
                 }
             }
         }

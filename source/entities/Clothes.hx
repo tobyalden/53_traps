@@ -17,6 +17,7 @@ class Clothes extends MiniEntity
 
     public function new(source:Entity, spriteName:String) {
         super(source.centerX, source.centerY);
+        layer = -99;
         var sprite = new Image('graphics/${spriteName}.png');
         sprite.centerOrigin();
         graphic = sprite;
