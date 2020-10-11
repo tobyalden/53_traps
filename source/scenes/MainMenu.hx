@@ -31,9 +31,10 @@ class MainMenu extends Scene
         curtain.fadeOut();
         message = new Text(
             'Press Z or Space',
-            0, 120, 180, 180,
+            0, HXP.height / 2, HXP.width, 0,
             {color: 0xFFFFFF, align: TextAlignType.CENTER, leading: 0}
         );
+        message.font = "font/CompassGold.ttf";
         addGraphic(message);
         canMove = true;
         var allowMove = new Alarm(0.5, function() {
@@ -42,7 +43,7 @@ class MainMenu extends Scene
         addTween(allowMove, true);
         bob = new VarTween(TweenType.PingPong);
         addTween(bob);
-        bob.tween(message, 'y', 125, 1, Ease.sineInOut);
+        bob.tween(message, 'y', HXP.height / 2 + 10, 1, Ease.sineInOut);
         flasher = new VarTween(TweenType.PingPong);
         addTween(flasher);
         if(sfx == null) {
@@ -63,8 +64,9 @@ class MainMenu extends Scene
             curtain.fadeIn();
             flasher.tween(message, 'alpha', 0, 0.1, Ease.sineInOut);
             var reset = new Alarm(1, function() {
-                GameScene.currentCheckpoint = null;
-                HXP.scene = new GameScene();
+                GameScene.lives = 99;
+                GameScene.floorNumber = 1;
+                HXP.scene = new FloorTitle();
             });
             addTween(reset, true);
             sfx["start"].play(0.5);

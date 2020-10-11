@@ -16,10 +16,8 @@ import entities.Level;
 class GameScene extends Scene
 {
     public static inline var MAP_TILE_SIZE = 16;
-    //public static inline var NUMBER_OF_TRAPS = 10;
-    //public static inline var NUMBER_OF_TRAPS = 25;
-    //public static inline var NUMBER_OF_TRAPS = 50;
-    public static inline var NUMBER_OF_TRAPS = 100;
+    public static inline var MIN_NUMBER_OF_TRAPS = 10;
+    public static inline var MAX_NUMBER_OF_TRAPS = 100;
     public static inline var BASE_ICE_RADIUS = 9;
     public static inline var BASE_SPIKE_TRAP_RADIUS = 5;
 
@@ -67,7 +65,7 @@ class GameScene extends Scene
             curtain.fadeIn();
             HXP.alarm(0.5, function() {
                 if(lives == 0) {
-                    HXP.scene = new MainMenu();
+                    HXP.scene = new GameOver();
                 }
                 else {
                     HXP.scene = new FloorTitle();
@@ -305,7 +303,8 @@ class GameScene extends Scene
         for(spotType in openSpots.keys()) {
             HXP.shuffle(openSpots[spotType]);
         }
-        for(i in 0...NUMBER_OF_TRAPS) {
+        var numberOfTraps = MathUtil.ilerp(MIN_NUMBER_OF_TRAPS, MAX_NUMBER_OF_TRAPS, floorNumber / 99);
+        for(i in 0...numberOfTraps) {
             var openSpot = openSpots["edges"].pop();
             var enemy = HXP.choose(
                 "spikeball", "icicle", "ice", "medusa", "ballspewer",
