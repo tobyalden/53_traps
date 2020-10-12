@@ -18,6 +18,8 @@ class MainMenu extends Scene
 {
     //public static inline var MAP_TILE_SIZE = 16;
 
+    public static var metaSeed:Int = 1;
+
     public static var sfx:Map<String, Sfx> = null;
     private var curtain:Curtain;
     private var message:Text;
@@ -64,8 +66,9 @@ class MainMenu extends Scene
             curtain.fadeIn();
             flasher.tween(message, 'alpha', 0, 0.1, Ease.sineInOut);
             var reset = new Alarm(1, function() {
-                GameScene.lives = 99;
-                GameScene.floorNumber = GameScene.NUMBER_OF_FLOORS;
+                GameScene.lives = GameScene.STARTING_NUMBER_OF_LIVES;
+                GameScene.floorNumber = 1;
+                metaSeed = Std.int(Math.round(Math.random() * 1000000000));
                 HXP.scene = new FloorTitle();
             });
             addTween(reset, true);

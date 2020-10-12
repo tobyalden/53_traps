@@ -16,19 +16,19 @@ import entities.Level;
 class GameScene extends Scene
 {
     public static inline var MAP_TILE_SIZE = 16;
-    //public static inline var MIN_NUMBER_OF_TRAPS = 25;
-    //public static inline var MAX_NUMBER_OF_TRAPS = 100;
-    public static inline var MIN_NUMBER_OF_TRAPS = 0;
-    public static inline var MAX_NUMBER_OF_TRAPS = 0;
+    public static inline var MIN_NUMBER_OF_TRAPS = 50;
+    public static inline var MAX_NUMBER_OF_TRAPS = 100;
     public static inline var BASE_NUMBER_OF_HALLWAYS = 10;
-    public static inline var NUMBER_OF_FLOORS = 9;
     public static inline var BASE_ICE_RADIUS = 9;
     public static inline var BASE_SPIKE_TRAP_RADIUS = 5;
+
+    public static inline var NUMBER_OF_FLOORS = 9;
+    public static inline var STARTING_NUMBER_OF_LIVES = 9;
 
     public static var currentCheckpoint:Vector2 = null;
     public static var sfx:Map<String, Sfx> = null;
 
-    public static var lives:Int = 99;
+    public static var lives:Int = STARTING_NUMBER_OF_LIVES;
     public static var floorNumber:Int = 1;
 
     public var curtain(default, null):Curtain;
@@ -43,7 +43,7 @@ class GameScene extends Scene
     private var pauseTimer:Alarm;
 
     override public function begin() {
-        Random.randomSeed = floorNumber;
+        Random.randomSeed = MainMenu.metaSeed + floorNumber;
         curtain = add(new Curtain());
         loadMaps(0);
         placeLevels();
@@ -320,11 +320,13 @@ class GameScene extends Scene
         for(spotType in openSpots.keys()) {
             HXP.shuffle(openSpots[spotType]);
         }
-        var numberOfTraps = MathUtil.ilerp(
-            MIN_NUMBER_OF_TRAPS,
-            MAX_NUMBER_OF_TRAPS,
-            floorNumber / NUMBER_OF_FLOORS
-        );
+        //var numberOfTraps = MathUtil.ilerp(
+            //MIN_NUMBER_OF_TRAPS,
+            //MAX_NUMBER_OF_TRAPS,
+            //floorNumber / NUMBER_OF_FLOORS
+        //);
+        var numTrapsByFloor = [33, 40, 50, 52, 54, 56, 50, 58, 70];
+        var numberOfTraps = numTrapsByFloor[floorNumber - 1];
         for(i in 0...numberOfTraps) {
             var openSpot = openSpots["edges"].pop();
             var enemy = HXP.choose(
