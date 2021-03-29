@@ -22,8 +22,8 @@ class GameScene extends Scene
     public static inline var BASE_ICE_RADIUS = 9;
     public static inline var BASE_SPIKE_TRAP_RADIUS = 5;
 
-    public static inline var NUMBER_OF_FLOORS = 9;
-    public static inline var STARTING_NUMBER_OF_LIVES = 9;
+    public static inline var NUMBER_OF_FLOORS = 5;
+    public static inline var STARTING_NUMBER_OF_LIVES = 1;
 
     public static var currentCheckpoint:Vector2 = null;
     public static var sfx:Map<String, Sfx> = null;

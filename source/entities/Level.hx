@@ -21,7 +21,7 @@ class Level extends Entity
     public static inline var MIN_LEVEL_WIDTH_IN_TILES = 32;
     public static inline var MIN_LEVEL_HEIGHT_IN_TILES = 18;
     public static inline var NUMBER_OF_ROOMS = 1;
-    public static inline var NUMBER_OF_HALLWAYS = 4;
+    public static inline var NUMBER_OF_HALLWAYS = 5;
     public static inline var NUMBER_OF_SHAFTS = 1;
 
     public var walls(default, null):Grid;
@@ -45,6 +45,7 @@ class Level extends Entity
             loadLevel('${
                 Std.int(Math.floor(Random.random * NUMBER_OF_HALLWAYS))
             }');
+            //loadLevel('1');
         }
         updateGraphic();
         mask = walls;
@@ -99,6 +100,19 @@ class Level extends Entity
         // Load optional geometry
         if(fastXml.hasNode.optionalWalls) {
             for (r in fastXml.node.optionalWalls.nodes.rect) {
+                if(Random.random < 0.5) {
+                    continue;
+                }
+                walls.setRect(
+                    Std.int(Std.parseInt(r.att.x) / TILE_SIZE),
+                    Std.int(Std.parseInt(r.att.y) / TILE_SIZE),
+                    Std.int(Std.parseInt(r.att.w) / TILE_SIZE),
+                    Std.int(Std.parseInt(r.att.h) / TILE_SIZE)
+                );
+            }
+        }
+        if(fastXml.hasNode.optionalWalls2) {
+            for (r in fastXml.node.optionalWalls2.nodes.rect) {
                 if(Random.random < 0.5) {
                     continue;
                 }

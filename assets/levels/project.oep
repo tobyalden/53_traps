@@ -10,6 +10,7 @@
 	<layers> 
 		<grid name="walls" gridSize="10" exportAsObjects="true"/>
 		<grid name="optionalWalls" gridSize="10" exportAsObjects="true" color="#AAFF0000"/>
+		<grid name="optionalWalls2" gridSize="10" exportAsObjects="true" color="#AAFFFF00"/>
 		<objects name="objects" gridSize="5"/>
 		<grid name="guide" gridSize="100" exportAsObjects="true" color="#AA98FB98"/>
 	</layers> 
