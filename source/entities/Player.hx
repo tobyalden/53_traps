@@ -227,6 +227,9 @@ class Player extends MiniEntity
         if(isOnIce()) {
             maxSpeed *= ICE_MAX_SPEED_MULTIPLIER;
         }
+        else if(carriedItem != null) {
+            maxSpeed *= 0.75;
+        }
         velocity.x = MathUtil.clamp(velocity.x, -maxSpeed, maxSpeed);
 
         if(isOnGround()) {
@@ -237,6 +240,9 @@ class Player extends MiniEntity
                     jumpPower
                     + Math.abs(velocity.x * RUN_SPEED_APPLIED_TO_JUMP_POWER)
                 );
+                if(carriedItem != null) {
+                    velocity.y *= 0.85;
+                }
                 sfx["jump"].play();
             }
         }

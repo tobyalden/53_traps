@@ -40,7 +40,9 @@ class Item extends MiniEntity
             //moveTo(carrier.centerX - width / 2, carrier.y - height);
         }
         else {
-            velocity.y += Player.GRAVITY * HXP.elapsed;
+            if(!isOnGround()) {
+                velocity.y += Player.GRAVITY * HXP.elapsed;
+            }
             velocity.y = Math.min(velocity.y, Player.MAX_FALL_SPEED);
             moveBy(velocity.x * HXP.elapsed, velocity.y * HXP.elapsed, "walls");
         }
@@ -53,7 +55,15 @@ class Item extends MiniEntity
     }
 
     override public function moveCollideY(_:Entity) {
-        velocity /= 2;
+        velocity.x = velocity.x / 2;
+        if(Math.abs(velocity.x) < 10) {
+            velocity.x = 0;
+        }
+
+        velocity.y = -velocity.y / 2;
+        if(Math.abs(velocity.y) < 10) {
+            velocity.y = 0;
+        }
         return true;
     }
 }
