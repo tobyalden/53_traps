@@ -41,11 +41,13 @@ class Level extends Entity
         else if(levelType == "end") {
             loadLevel('0');
         }
-        else { // levelType == "hallway"
+        else if(levelType == "hallway") {
             loadLevel('${
                 Std.int(Math.floor(Random.random * NUMBER_OF_HALLWAYS))
             }');
-            //loadLevel('1');
+        }
+        else { // pot
+            loadLevel('0');
         }
         updateGraphic();
         mask = walls;

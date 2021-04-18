@@ -41,13 +41,21 @@ class GameScene extends Scene
     private var allLevels:Array<Level>;
     private var player:Player;
     private var pauseTimer:Alarm;
+    private var isPot:Bool;
+
+    public function new(isPot:Bool = false) {
+        this.isPot = isPot;
+        super();
+    }
 
     override public function begin() {
         Random.randomSeed = MainMenu.metaSeed + floorNumber;
         curtain = add(new Curtain());
         loadMaps(0);
         placeLevels();
-        placeTraps();
+        if(!isPot) {
+            placeTraps();
+        }
         if(sfx == null) {
             sfx = [
                 "restart" => new Sfx("audio/restart.wav")
@@ -117,16 +125,26 @@ class GameScene extends Scene
             sfx["restart"].play();
         }
         super.update();
-        camera.setTo(player.centerX - HXP.width / 3, 0);
-        //camera.setTo(
-            //Math.floor(player.centerX / HXP.width) * HXP.width,
-            //Math.floor(player.centerY / HXP.height) * HXP.height,
-            //0, 0
-        //);
+        if(isPot) {
+            camera.setTo(
+                Math.floor(player.centerX / HXP.width) * HXP.width,
+                Math.floor(player.centerY / HXP.height) * HXP.height,
+                0, 0
+            );
+        }
+        else {
+            camera.setTo(player.centerX - HXP.width / 3, 0);
+        }
+        if(isPot && player.top < 0) {
+            HXP.engine.popScene();
+        }
     }
 
     private function loadMaps(mapNumber:Int) {
-        var mapPath = 'maps/0.oel';
+        var mapPath = 'maps/${mapNumber}.oel';
+        if(isPot) {
+            mapPath = 'maps/pot.oel';
+        }
         var xml = Xml.parse(Assets.getText(mapPath));
         var fastXml = new haxe.xml.Fast(xml.firstElement());
         var mapWidth = Std.parseInt(fastXml.node.width.innerData);
@@ -239,6 +257,9 @@ class GameScene extends Scene
                         var canPlace = false;
                         while(!canPlace) {
                             var levelType = levelTypes[count];
+                            if(levelType == "hallway" && isPot) {
+                                levelType = "pot";
+                            }
                             var level = new Level(
                                 tileX * Level.MIN_LEVEL_WIDTH,
                                 tileY * Level.MIN_LEVEL_HEIGHT,

@@ -33,6 +33,9 @@ class Player extends MiniEntity
 
     public static var sfx:Map<String, Sfx> = null;
 
+    public var carriedItem:Item;
+    private var lastPot:Pot;
+
     private var sprite:Spritemap;
     private var velocity:Vector2;
     private var isDead:Bool;
@@ -42,13 +45,13 @@ class Player extends MiniEntity
     private var hitbox:Hitbox;
     private var health:Int;
     private var invincibleTimer:Alarm;
-    private var carriedItem:Item;
 
     public function new(x:Float, y:Float) {
         super(x, y);
         name = "player";
         type = "player";
         layer = -10;
+        lastPot = null;
         sprite = new Spritemap("graphics/player.png", 8, 12);
         sprite.add("idle", [0]);
         sprite.add("run", [1, 2, 3, 2], 8);
@@ -78,7 +81,6 @@ class Player extends MiniEntity
         health = MAX_HEALTH;
         invincibleTimer = new Alarm(INVINCIBLE_TIME);
         addTween(invincibleTimer);
-        carriedItem = null;
         canMove = false;
         var allowMove = new Alarm(0.2, function() {
             canMove = true;
@@ -99,7 +101,14 @@ class Player extends MiniEntity
 
     override public function update() {
         if(!isDead) {
-            if(canMove) {
+            if(lastPot != null) {
+                canMove = false;
+                HXP.tween(this, {"x": lastPot.centerX - width / 2, "y": lastPot.top - height}, 1, {complete: function() {
+                    canMove = true;
+                }});
+                lastPot = null;
+            }
+            else if(canMove) {
                 movement();
             }
             if(Main.inputPressed("action")) {
@@ -115,6 +124,22 @@ class Player extends MiniEntity
                     if(item != null) {
                         carriedItem = cast(item, Item);
                         carriedItem.setCarrier(this);
+                    }
+                }
+            }
+            if(Main.inputPressed("down")) {
+                var item = collide("item", x, y + 1);
+                if(item != null) {
+                    if(item.name == "pot") {
+                        canMove = false;
+                        HXP.tween(this, {"x": item.centerX - width / 2, "y": item.bottom - height}, 1, {complete: function() {
+                            lastPot = cast(item, Pot);
+                            HXP.engine.pushScene(new GameScene(true));
+                            if(carriedItem != null) {
+                                scene.remove(carriedItem);
+                                carriedItem = null;
+                            }
+                        }});
                     }
                 }
             }

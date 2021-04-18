@@ -13,6 +13,8 @@ class Pot extends Item
 {
     public function new(x:Float, y:Float) {
         super(x, y);
+        name = "pot";
+        layer = -20;
         sprite = new Image("graphics/pot.png");
         graphic = sprite;
         mask = new Hitbox(15, 25);

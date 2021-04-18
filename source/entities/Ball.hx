@@ -28,7 +28,7 @@ class Ball extends MiniEntity
 
     override public function update() {
         if(collide("ballspewer", x, y) == null) {
-            moveBy(velocity.x * HXP.elapsed, velocity.y * HXP.elapsed, "walls");
+            moveBy(velocity.x * HXP.elapsed, velocity.y * HXP.elapsed, ["walls", "item"]);
         }
         else {
             moveBy(velocity.x * HXP.elapsed, velocity.y * HXP.elapsed);
