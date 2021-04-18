@@ -21,7 +21,7 @@ class Level extends Entity
     public static inline var MIN_LEVEL_WIDTH_IN_TILES = 32;
     public static inline var MIN_LEVEL_HEIGHT_IN_TILES = 18;
     public static inline var NUMBER_OF_ROOMS = 1;
-    public static inline var NUMBER_OF_HALLWAYS = 5;
+    public static inline var NUMBER_OF_HALLWAYS = 6;
     public static inline var NUMBER_OF_SHAFTS = 1;
 
     public var walls(default, null):Grid;

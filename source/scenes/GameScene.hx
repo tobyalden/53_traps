@@ -320,6 +320,16 @@ class GameScene extends Scene
         for(spotType in openSpots.keys()) {
             HXP.shuffle(openSpots[spotType]);
         }
+
+        for(i in 0...20) {
+            var openSpot = openSpots["on_floor_with_headroom"].pop();
+            var pot = new Pot(
+                openSpot.level.x + openSpot.tileX * Level.TILE_SIZE + Level.TILE_SIZE / 2,
+                openSpot.level.y + openSpot.tileY * Level.TILE_SIZE
+            );
+            pot.y -= pot.height;
+            add(pot);
+        }
         //var numberOfTraps = MathUtil.ilerp(
             //MIN_NUMBER_OF_TRAPS,
             //MAX_NUMBER_OF_TRAPS,
