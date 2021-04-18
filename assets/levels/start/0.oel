@@ -7,5 +7,6 @@
   </walls>
   <objects>
     <player x="60" y="90"/>
+    <item x="100" y="95"/>
   </objects>
 </level>

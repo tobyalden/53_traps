@@ -228,7 +228,7 @@ class Player extends MiniEntity
             velocity.y += GRAVITY * HXP.elapsed;
             velocity.y = Math.min(velocity.y, MAX_FALL_SPEED);
         }
-        moveBy(velocity.x * HXP.elapsed, velocity.y * HXP.elapsed, "walls");
+        moveBy(velocity.x * HXP.elapsed, velocity.y * HXP.elapsed, ["walls", "item"]);
     }
 
     override public function moveCollideX(_:Entity) {

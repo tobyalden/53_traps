@@ -135,6 +135,13 @@ class Level extends Entity
                 entities.push(player);
                 break;
             }
+            for(e in fastXml.node.objects.nodes.item) {
+                var item = new Item(
+                    Std.parseInt(e.att.x), Std.parseInt(e.att.y)
+                );
+                entities.push(item);
+                break;
+            }
             for(e in fastXml.node.objects.nodes.exit) {
                 var exit = new Exit(
                     Std.parseInt(e.att.x), Std.parseInt(e.att.y)
