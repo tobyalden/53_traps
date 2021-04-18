@@ -109,14 +109,17 @@ class Player extends MiniEntity
                 }});
                 lastPot = null;
             }
+            else if(GameScene.bankedItem != null) {
+                carriedItem = Item.unserialize(GameScene.bankedItem);
+                carriedItem.setCarrier(this);
+                HXP.scene.add(carriedItem);
+                GameScene.bankedItem = null;
+            }
             else if(canMove) {
-                if(GameScene.bankedItem != null) {
-                    carriedItem = Item.unserialize(GameScene.bankedItem);
-                    carriedItem.setCarrier(this);
-                    HXP.scene.add(carriedItem);
-                    GameScene.bankedItem = null;
-                }
                 movement();
+            }
+            if(carriedItem != null) {
+                carriedItem.moveTo(Math.floor(centerX - carriedItem.width / 2), Math.floor(y - carriedItem.height));
             }
             if(Main.inputPressed("action")) {
                 if(carriedItem != null) {
@@ -294,7 +297,6 @@ class Player extends MiniEntity
         moveBy(velocity.x * HXP.elapsed, velocity.y * HXP.elapsed, ["walls", "item"]);
         if(carriedItem != null) {
             carriedItem.collidable = true;
-            carriedItem.moveTo(Math.floor(centerX - carriedItem.width / 2), Math.floor(y - carriedItem.height));
         }
     }
 
