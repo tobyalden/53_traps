@@ -29,7 +29,7 @@ class Main extends Engine
         Key.define("up", [Key.I, Key.W, Key.UP]);
         Key.define("down", [Key.K, Key.S, Key.DOWN]);
         Key.define("jump", [Key.SPACE, Key.Z]);
-        Key.define("attack", [Key.X]);
+        Key.define("action", [Key.X]);
 
         //HXP.fullscreen = true;
         //HXP.screen.scaleMode = new UniformScaleMode(UniformScaleType.Expand);

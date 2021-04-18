@@ -22,6 +22,7 @@ class Player extends MiniEntity
     public static inline var MAX_RUN_SPEED = 120;
     public static inline var MAX_AIR_SPEED = 160;
     public static inline var GRAVITY = 500;
+    public static inline var THROW_POWER = 100;
     public static inline var JUMP_POWER = 160;
     public static inline var CROUCH_JUMP_POWER = 120;
     public static inline var JUMP_CANCEL_POWER = 40;
@@ -41,6 +42,7 @@ class Player extends MiniEntity
     private var hitbox:Hitbox;
     private var health:Int;
     private var invincibleTimer:Alarm;
+    private var carriedItem:Item;
 
     public function new(x:Float, y:Float) {
         super(x, y);
@@ -76,6 +78,7 @@ class Player extends MiniEntity
         health = MAX_HEALTH;
         invincibleTimer = new Alarm(INVINCIBLE_TIME);
         addTween(invincibleTimer);
+        carriedItem = null;
         canMove = false;
         var allowMove = new Alarm(0.2, function() {
             canMove = true;
@@ -98,6 +101,22 @@ class Player extends MiniEntity
         if(!isDead) {
             if(canMove) {
                 movement();
+            }
+            if(Main.inputPressed("action")) {
+                if(carriedItem != null) {
+                    carriedItem.setCarrier(null);
+                    var throwVelocity = new Vector2(sprite.flipX ? -THROW_POWER : THROW_POWER, -THROW_POWER);
+                    throwVelocity.add(velocity);
+                    carriedItem.setVelocity(throwVelocity);
+                    carriedItem = null;
+                }
+                else {
+                    var item = collide("item", x, y + 1);
+                    if(item != null) {
+                        carriedItem = cast(item, Item);
+                        carriedItem.setCarrier(this);
+                    }
+                }
             }
             animation();
             if(canMove) {
@@ -228,7 +247,14 @@ class Player extends MiniEntity
             velocity.y += GRAVITY * HXP.elapsed;
             velocity.y = Math.min(velocity.y, MAX_FALL_SPEED);
         }
+        if(carriedItem != null) {
+            carriedItem.collidable = false;
+        }
         moveBy(velocity.x * HXP.elapsed, velocity.y * HXP.elapsed, ["walls", "item"]);
+        if(carriedItem != null) {
+            carriedItem.collidable = true;
+            carriedItem.moveTo(Math.floor(centerX - carriedItem.width / 2), Math.floor(y - carriedItem.height));
+        }
     }
 
     override public function moveCollideX(_:Entity) {

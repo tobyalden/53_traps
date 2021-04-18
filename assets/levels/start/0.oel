@@ -6,7 +6,7 @@
     <rect x="10" y="110" w="310" h="70"/>
   </walls>
   <objects>
-    <player x="60" y="90"/>
-    <item x="100" y="95"/>
+    <player x="95" y="90"/>
+    <item x="55" y="95"/>
   </objects>
 </level>

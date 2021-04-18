@@ -8,12 +8,24 @@ import haxepunk.math.*;
 
 class MiniEntity extends Entity
 {
+    public static var solids = ["walls", "item"];
+
     public function new(x:Float, y:Float) {
         super(x, y);
     }
 
+    public function collideMultiple(collideTypes:Array<String>, collideX:Float, collideY:Float) {
+        for(collideType in collideTypes) {
+            var collision = collide(collideType, collideX, collideY);
+            if(collision != null) {
+                return collision;
+            }
+        }
+        return null;
+    }
+
     private function isOnGround() {
-        return collide("walls", x, y + 1) != null;
+        return collideMultiple(["walls", "item"], x, y + 1) != null;
     }
 
     private function isOnIce() {
@@ -21,7 +33,7 @@ class MiniEntity extends Entity
     }
 
     private function isOnCeiling() {
-        return collide("walls", x, y - 1) != null;
+        return collideMultiple(["walls", "item"], x, y - 1) != null;
     }
 
     private function isOnWall() {
@@ -29,11 +41,11 @@ class MiniEntity extends Entity
     }
 
     private function isOnRightWall() {
-        return collide("walls", x + 1, y) != null;
+        return collideMultiple(["walls", "item"], x + 1, y) != null;
     }
 
     private function isOnLeftWall() {
-        return collide("walls", x - 1, y) != null;
+        return collideMultiple(["walls", "item"], x - 1, y) != null;
     }
 
     private function getHeadingTowards(e:Entity) {
