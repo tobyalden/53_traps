@@ -30,6 +30,7 @@ class GameScene extends Scene
 
     public static var lives:Int = STARTING_NUMBER_OF_LIVES;
     public static var floorNumber:Int = 1;
+    public static var bankedItem:String = null;
 
     public var curtain(default, null):Curtain;
     public var openSpots(default, null):Map<String, Array<TileCoordinates>>;
@@ -137,6 +138,9 @@ class GameScene extends Scene
         }
         if(isPot && player.top < 0) {
             HXP.engine.popScene();
+            if(player.carriedItem != null) {
+                GameScene.bankedItem = player.carriedItem.serialize();
+            }
         }
     }
 

@@ -33,7 +33,7 @@ class Player extends MiniEntity
 
     public static var sfx:Map<String, Sfx> = null;
 
-    public var carriedItem:Item;
+    public var carriedItem(default, null):Item;
     private var lastPot:Pot;
 
     private var sprite:Spritemap;
@@ -105,10 +105,17 @@ class Player extends MiniEntity
                 canMove = false;
                 HXP.tween(this, {"x": lastPot.centerX - width / 2, "y": lastPot.top - height}, 1, {complete: function() {
                     canMove = true;
+                    collidable = true;
                 }});
                 lastPot = null;
             }
             else if(canMove) {
+                if(GameScene.bankedItem != null) {
+                    carriedItem = Item.unserialize(GameScene.bankedItem);
+                    carriedItem.setCarrier(this);
+                    HXP.scene.add(carriedItem);
+                    GameScene.bankedItem = null;
+                }
                 movement();
             }
             if(Main.inputPressed("action")) {
@@ -132,12 +139,15 @@ class Player extends MiniEntity
                 if(item != null) {
                     if(item.name == "pot") {
                         canMove = false;
+                        collidable = false;
                         HXP.tween(this, {"x": item.centerX - width / 2, "y": item.bottom - height}, 1, {complete: function() {
                             lastPot = cast(item, Pot);
                             HXP.engine.pushScene(new GameScene(true));
                             if(carriedItem != null) {
+                                GameScene.bankedItem = carriedItem.serialize();
                                 scene.remove(carriedItem);
                                 carriedItem = null;
+                                trace('banked item: ${GameScene.bankedItem}');
                             }
                         }});
                     }

@@ -1,5 +1,7 @@
 package entities;
 
+import haxe.Serializer;
+import haxe.Unserializer;
 import haxepunk.*;
 import haxepunk.graphics.*;
 import haxepunk.masks.*;
@@ -17,9 +19,27 @@ class Item extends MiniEntity
     private var velocity:Vector2;
     private var carrier:MiniEntity;
 
+    public function serialize() {
+        var serializer = new Serializer();
+        serializer.serialize({name: name});
+        return serializer.toString();
+    }
+
+    static public function unserialize(serializedItem:String):Item {
+        var unserializer = new Unserializer(serializedItem);
+        var unserializedItem = unserializer.unserialize();
+        if(unserializedItem.name == "pot") {
+            return new Pot(0, 0);
+        }
+        else {
+            return new Item(0, 0);
+        }
+    }
+
     public function new(x:Float, y:Float) {
         super(x, y);
         type = "item";
+        name = "item";
         sprite = new Image("graphics/item.png");
         graphic = sprite;
         velocity = new Vector2();

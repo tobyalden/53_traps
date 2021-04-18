@@ -25,7 +25,7 @@
     <rect x="300" y="10" w="10" h="30"/>
   </optionalWalls>
   <objects>
-    <player x="160" y="30"/>
+    <player x="160" y="0"/>
     <item x="260" y="55"/>
   </objects>
 </level>
