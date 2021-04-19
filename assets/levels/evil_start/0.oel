@@ -1,0 +1,21 @@
+<level>
+  <width>320</width>
+  <height>180</height>
+  <walls>
+    <rect x="0" y="110" w="320" h="70"/>
+    <rect x="110" y="80" w="100" h="30"/>
+    <rect x="120" y="0" w="10" h="30"/>
+    <rect x="130" y="20" w="10" h="10"/>
+    <rect x="140" y="50" w="40" h="30"/>
+    <rect x="180" y="20" w="20" h="10"/>
+    <rect x="190" y="0" w="10" h="20"/>
+  </walls>
+  <objects>
+    <player x="155" y="0"/>
+    <item x="55" y="95"/>
+    <spike_floor x="25" y="105" width="20"/>
+    <spike_floor x="80" y="105" width="30"/>
+    <spike_floor x="235" y="105" width="25"/>
+    <spike_floor x="300" y="105" width="20"/>
+  </objects>
+</level>

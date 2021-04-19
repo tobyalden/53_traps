@@ -46,9 +46,11 @@ class GameScene extends Scene
     private var player:Player;
     private var pauseTimer:Alarm;
     private var inPot:Pot;
+    private var isEvil:Bool;
 
-    public function new(inPot:Pot = null) {
+    public function new(inPot:Pot = null, isEvil:Bool = false) {
         this.inPot = inPot;
+        this.isEvil = isEvil;
         super();
     }
 
@@ -136,6 +138,9 @@ class GameScene extends Scene
                 0, 0
             );
         }
+        else if(isEvil) {
+            camera.setTo(player.centerX - HXP.width / 2, 0);
+        }
         else {
             camera.setTo(player.centerX - HXP.width / 3, 0);
         }
@@ -175,6 +180,9 @@ class GameScene extends Scene
         var mapPath = 'maps/${mapNumber}.oel';
         if(inPot != null) {
             mapPath = 'maps/pot.oel';
+        }
+        else if(isEvil) {
+            mapPath = 'maps/evil.oel';
         }
         var xml = Xml.parse(Assets.getText(mapPath));
         var fastXml = new haxe.xml.Fast(xml.firstElement());
@@ -288,13 +296,18 @@ class GameScene extends Scene
                         var canPlace = false;
                         while(!canPlace) {
                             var levelType = levelTypes[count];
-                            if(levelType == "hallway" && inPot != null) {
-                                levelType = "pot";
+                            if(levelType == "hallway") {
+                                if(inPot != null) {
+                                    levelType = "pot";
+                                }
+                                else if(isEvil) {
+                                    levelType = "evil";
+                                }
                             }
                             var level = new Level(
                                 tileX * Level.MIN_LEVEL_WIDTH,
                                 tileY * Level.MIN_LEVEL_HEIGHT,
-                                levelType
+                                levelType, isEvil
                             );
                             var levelWidth = Std.int(
                                 level.width / Level.MIN_LEVEL_WIDTH
@@ -391,6 +404,9 @@ class GameScene extends Scene
         var numberOfTraps = numTrapsByFloor[floorNumber - 1];
         for(i in 0...numberOfTraps) {
             var openSpot = openSpots["edges"].pop();
+            if(openSpot == null) {
+                continue;
+            }
             var enemy = HXP.choose(
                 "spikeball", "icicle", "ice", "medusa", "ballspewer",
                 "spiketrap", "spiketurtle", "jumper"
@@ -405,6 +421,9 @@ class GameScene extends Scene
             }
             else if(enemy == "icicle") {
                 var openSpot = openSpots["on_ceiling"].pop();
+                if(openSpot == null) {
+                    continue;
+                }
                 var trap = new Icicle(
                     openSpot.level.x + openSpot.tileX * Level.TILE_SIZE,
                     openSpot.level.y + openSpot.tileY * Level.TILE_SIZE
@@ -413,6 +432,9 @@ class GameScene extends Scene
             }
             else if(enemy == "ice") {
                 var openSpot = openSpots["in_floor"].pop();
+                if(openSpot == null) {
+                    continue;
+                }
                 var iceRadius = BASE_ICE_RADIUS + HXP.choose(-2, 0, 2, 4);
                 var tileStart = Std.int(Math.round(-iceRadius / 2));
                 var tileEnd = tileStart + iceRadius;
@@ -432,6 +454,9 @@ class GameScene extends Scene
             }
             else if(enemy == "medusa") {
                 var openSpot = openSpots["near_center"].pop();
+                if(openSpot == null) {
+                    continue;
+                }
                 var trap = new Medusa(
                     openSpot.level.x + openSpot.tileX * Level.TILE_SIZE,
                     openSpot.level.y + openSpot.tileY * Level.TILE_SIZE
@@ -440,6 +465,9 @@ class GameScene extends Scene
             }
             else if(enemy == "ballspewer") {
                 var openSpot = openSpots["walls"].pop();
+                if(openSpot == null) {
+                    continue;
+                }
                 var trap = new BallSpewer(
                     openSpot.level.x + openSpot.tileX * Level.TILE_SIZE,
                     openSpot.level.y + openSpot.tileY * Level.TILE_SIZE,
@@ -452,6 +480,9 @@ class GameScene extends Scene
                 var spikeTrapRadius = BASE_SPIKE_TRAP_RADIUS + HXP.choose(-2, -1, 0, 1, 2);
                 //var spikeTrapRadius = BASE_SPIKE_TRAP_RADIUS;
                 var openSpot = openSpots["in_floor"].pop();
+                if(openSpot == null) {
+                    continue;
+                }
                 var tileStart = Std.int(Math.round(-spikeTrapRadius / 2));
                 var tileEnd = tileStart + spikeTrapRadius;
                 for(tileX in tileStart...tileEnd) {
@@ -475,6 +506,9 @@ class GameScene extends Scene
             }
             else if(enemy == "spiketurtle") {
                 var openSpot = openSpots["on_floor"].pop();
+                if(openSpot == null) {
+                    continue;
+                }
                 var trap = new SpikeTurtle(
                     openSpot.level.x + openSpot.tileX * Level.TILE_SIZE,
                     openSpot.level.y + openSpot.tileY * Level.TILE_SIZE
@@ -483,6 +517,9 @@ class GameScene extends Scene
             }
             else if(enemy == "jumper") {
                 var openSpot = openSpots["on_floor_with_headroom"].pop();
+                if(openSpot == null) {
+                    continue;
+                }
                 var trap = new Jumper(
                     openSpot.level.x + openSpot.tileX * Level.TILE_SIZE,
                     openSpot.level.y + openSpot.tileY * Level.TILE_SIZE - 2

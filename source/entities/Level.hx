@@ -29,13 +29,18 @@ class Level extends Entity
     public var openSpots(default, null):Map<String, Array<TileCoordinates>>;
     private var levelType:String;
     private var tiles:Tilemap;
+    private var isEvil:Bool;
 
-    public function new(x:Int, y:Int, levelType:String) {
+    public function new(x:Int, y:Int, levelType:String, isEvil:Bool) {
         super(x, y);
         layer = 10;
         this.levelType = levelType;
+        this.isEvil = isEvil;
         type = "walls";
         if(levelType == "start") {
+            if(isEvil) {
+                this.levelType = "evil_start";
+            }
             loadLevel('0');
         }
         else if(levelType == "end") {
@@ -151,6 +156,46 @@ class Level extends Entity
                 entities.push(exit);
                 break;
             }
+            for(e in fastXml.node.objects.nodes.spike_floor) {
+                if(Random.random < 0.5) {
+                    continue;
+                }
+                var spike = new Spike(
+                    Std.parseInt(e.att.x), Std.parseInt(e.att.y),
+                    Spike.FLOOR, Std.parseInt(e.att.width)
+                );
+                entities.push(spike);
+            }
+            for(e in fastXml.node.objects.nodes.spike_ceiling) {
+                if(Random.random < 0.5) {
+                    continue;
+                }
+                var spike = new Spike(
+                    Std.parseInt(e.att.x), Std.parseInt(e.att.y),
+                    Spike.CEILING, Std.parseInt(e.att.width)
+                );
+                entities.push(spike);
+            }
+            for(e in fastXml.node.objects.nodes.spike_leftwall) {
+                if(Random.random < 0.5) {
+                    continue;
+                }
+                var spike = new Spike(
+                    Std.parseInt(e.att.x), Std.parseInt(e.att.y),
+                    Spike.LEFT_WALL, Std.parseInt(e.att.height)
+                );
+                entities.push(spike);
+            }
+            for(e in fastXml.node.objects.nodes.spike_rightwall) {
+                if(Random.random < 0.5) {
+                    continue;
+                }
+                var spike = new Spike(
+                    Std.parseInt(e.att.x), Std.parseInt(e.att.y),
+                    Spike.RIGHT_WALL, Std.parseInt(e.att.height)
+                );
+                entities.push(spike);
+            }
         }
 
         // Create open spots
@@ -163,7 +208,7 @@ class Level extends Entity
             "near_center" => new Array<TileCoordinates>(),
             "walls" => new Array<TileCoordinates>()
         ];
-        if(levelType == "start" || levelType == "end") {
+        if(levelType == "start" || levelType == "end" || levelType == "evil_start") {
             return;
         }
         for(tileX in 0...walls.columns) {
@@ -291,7 +336,7 @@ class Level extends Entity
         for(tileX in 0...walls.columns) {
             for(tileY in 0...walls.rows) {
                 if(walls.getTile(tileX, tileY)) {
-                    tiles.setTile(tileX, tileY, 0);
+                    tiles.setTile(tileX, tileY, isEvil ? 1 : 0);
                 }
                 //if(hasOpenSpot("on_floor", tileX, tileY)) {
                     //tiles.setTile(tileX, tileY, 1);

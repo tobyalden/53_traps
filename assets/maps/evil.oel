@@ -1,0 +1,11 @@
+<level>
+  <width>320</width>
+  <height>16</height>
+  <hallways>
+    <rect x="0" y="0" w="160" h="16"/>
+    <rect x="176" y="0" w="144" h="16"/>
+  </hallways>
+  <start>
+    <rect x="160" y="0" w="16" h="16"/>
+  </start>
+</level>
