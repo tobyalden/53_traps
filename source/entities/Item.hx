@@ -21,7 +21,7 @@ class Item extends MiniEntity
 
     public function serialize() {
         var serializer = new Serializer();
-        serializer.serialize({name: name});
+        serializer.serialize({x: x, y: y, name: name});
         return serializer.toString();
     }
 
@@ -29,10 +29,10 @@ class Item extends MiniEntity
         var unserializer = new Unserializer(serializedItem);
         var unserializedItem = unserializer.unserialize();
         if(unserializedItem.name == "pot") {
-            return new Pot(0, 0);
+            return new Pot(unserializedItem.x, unserializedItem.y);
         }
         else {
-            return new Item(0, 0);
+            return new Item(unserializedItem.x, unserializedItem.y);
         }
     }
 

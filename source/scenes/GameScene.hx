@@ -1,6 +1,8 @@
 package scenes;
 
 import entities.*;
+import haxe.Serializer;
+import haxe.Unserializer;
 import haxepunk.*;
 import haxepunk.graphics.*;
 import haxepunk.graphics.tile.*;
@@ -31,6 +33,7 @@ class GameScene extends Scene
     public static var lives:Int = STARTING_NUMBER_OF_LIVES;
     public static var floorNumber:Int = 1;
     public static var bankedItem:String = null;
+    public static var bankedLevel:String = null;
 
     public var curtain(default, null):Curtain;
     public var openSpots(default, null):Map<String, Array<TileCoordinates>>;
@@ -42,10 +45,10 @@ class GameScene extends Scene
     private var allLevels:Array<Level>;
     private var player:Player;
     private var pauseTimer:Alarm;
-    private var isPot:Bool;
+    private var inPot:Pot;
 
-    public function new(isPot:Bool = false) {
-        this.isPot = isPot;
+    public function new(inPot:Pot = null) {
+        this.inPot = inPot;
         super();
     }
 
@@ -54,7 +57,7 @@ class GameScene extends Scene
         curtain = add(new Curtain());
         loadMaps(0);
         placeLevels();
-        if(!isPot) {
+        if(inPot == null) {
             placeTraps();
         }
         if(sfx == null) {
@@ -126,7 +129,7 @@ class GameScene extends Scene
             sfx["restart"].play();
         }
         super.update();
-        if(isPot) {
+        if(inPot != null) {
             camera.setTo(
                 Math.floor(player.centerX / HXP.width) * HXP.width,
                 Math.floor(player.centerY / HXP.height) * HXP.height,
@@ -136,17 +139,41 @@ class GameScene extends Scene
         else {
             camera.setTo(player.centerX - HXP.width / 3, 0);
         }
-        if(isPot && player.top < 0) {
+        if(inPot != null && player.top < 0) {
             HXP.engine.popScene();
+            GameScene.bankedLevel = serializeLevels();
+            trace(GameScene.bankedLevel);
             if(player.carriedItem != null) {
                 GameScene.bankedItem = player.carriedItem.serialize();
             }
         }
     }
 
+    private function serializeLevels() {
+        var serializer = new Serializer();
+        var serializedLevels = new Array<Dynamic>();
+        for(level in allLevels) {
+            var serializedItems = new Array<String>();
+            for(entity in level.entities) {
+                if(entity.type == "item") {
+                    serializedItems.push(cast(entity, Item).serialize());
+                }
+            }
+            var serializedLevel = {
+                walls: level.walls.saveToString(),
+                items: serializedItems
+            }
+            serializedLevels.push(serializedLevel);
+        }
+        serializer.serialize({
+            levels: serializedLevels
+        });
+        return serializer.toString();
+    }
+
     private function loadMaps(mapNumber:Int) {
         var mapPath = 'maps/${mapNumber}.oel';
-        if(isPot) {
+        if(inPot != null) {
             mapPath = 'maps/pot.oel';
         }
         var xml = Xml.parse(Assets.getText(mapPath));
@@ -261,7 +288,7 @@ class GameScene extends Scene
                         var canPlace = false;
                         while(!canPlace) {
                             var levelType = levelTypes[count];
-                            if(levelType == "hallway" && isPot) {
+                            if(levelType == "hallway" && inPot != null) {
                                 levelType = "pot";
                             }
                             var level = new Level(

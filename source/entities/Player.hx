@@ -145,7 +145,7 @@ class Player extends MiniEntity
                         collidable = false;
                         HXP.tween(this, {"x": item.centerX - width / 2, "y": item.bottom - height}, 1, {complete: function() {
                             lastPot = cast(item, Pot);
-                            HXP.engine.pushScene(new GameScene(true));
+                            HXP.engine.pushScene(new GameScene(lastPot));
                             if(carriedItem != null) {
                                 GameScene.bankedItem = carriedItem.serialize();
                                 scene.remove(carriedItem);
