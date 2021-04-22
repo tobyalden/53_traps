@@ -81,8 +81,13 @@ class GameScene extends Scene
     }
 
     private function placeLava() {
-        var lava = new Lava(-HXP.width * 10, HXP.height - 40, HXP.width * 40, 40);
-        HXP.tween(lava, {'y': HXP.height + 40}, 3, {type: TweenType.PingPong, ease: Ease.sineInOut});
+        var lava = new Lava(
+            -1000,
+            HXP.height - 40,
+            map.columns * Level.MIN_LEVEL_WIDTH + 1000,
+            40
+        );
+        HXP.tween(lava, {'y': HXP.height - 5}, 3, {type: TweenType.PingPong, ease: Ease.sineInOut});
         add(lava);
     }
 
