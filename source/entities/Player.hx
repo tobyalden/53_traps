@@ -145,8 +145,22 @@ class Player extends MiniEntity
                         collidable = false;
                         HXP.tween(this, {"x": item.centerX - width / 2, "y": item.bottom - height}, 1, {complete: function() {
                             lastPot = cast(item, Pot);
-                            var isAlreadyInPot = cast(scene, GameScene).inPot != null;
-                            HXP.engine.pushScene(new GameScene(isAlreadyInPot ? null : lastPot, isAlreadyInPot));
+                            var gameScene = cast(scene, GameScene);
+                            if(!gameScene.isEvil && gameScene.inPot == null) {
+                                // if you're in normal world and not in pot - go to normal pot
+                                HXP.engine.pushScene(new GameScene(lastPot, false));
+                            }
+                            else if(!gameScene.isEvil && gameScene.inPot != null) {
+                                // if you're in normal pot and not in evil would - go to evil world
+                                HXP.engine.pushScene(new GameScene(null, true));
+                            }
+                            else if(gameScene.isEvil && gameScene.inPot == null) {
+                                // if you're in evil world and not in pot - go in evil pot
+                                HXP.engine.pushScene(new GameScene(lastPot, true));
+                            }
+                            else if(gameScene.isEvil && gameScene.inPot != null) {
+                                // if you're in evil world and in pot ???
+                            }
                             if(carriedItem != null) {
                                 GameScene.bankedItem = carriedItem.serialize();
                                 scene.remove(carriedItem);

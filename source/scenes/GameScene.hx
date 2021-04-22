@@ -38,6 +38,7 @@ class GameScene extends Scene
     public var curtain(default, null):Curtain;
     public var openSpots(default, null):Map<String, Array<TileCoordinates>>;
     public var inPot(default, null):Pot;
+    public var isEvil(default, null):Bool;
     private var startMapBlueprint:Grid;
     private var hallwayMapBlueprint:Grid;
     private var endMapBlueprint:Grid;
@@ -46,7 +47,6 @@ class GameScene extends Scene
     private var allLevels:Array<Level>;
     private var player:Player;
     private var pauseTimer:Alarm;
-    private var isEvil:Bool;
 
     public function new(inPot:Pot = null, isEvil:Bool = false) {
         this.inPot = inPot;
@@ -144,7 +144,7 @@ class GameScene extends Scene
         else {
             camera.setTo(player.centerX - HXP.width / 3, 0);
         }
-        if(inPot != null && player.top < 0) {
+        if((inPot != null || isEvil) && player.top < 0) {
             HXP.engine.popScene();
             GameScene.bankedLevel = serializeLevels();
             trace(GameScene.bankedLevel);
