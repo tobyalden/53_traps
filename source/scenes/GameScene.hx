@@ -62,6 +62,9 @@ class GameScene extends Scene
         if(inPot == null) {
             placeTraps();
         }
+        if(isEvil) {
+            placeLava();
+        }
         if(sfx == null) {
             sfx = [
                 "restart" => new Sfx("audio/restart.wav")
@@ -75,6 +78,12 @@ class GameScene extends Scene
             }
         });
         addTween(pauseTimer);
+    }
+
+    private function placeLava() {
+        var lava = new Lava(-HXP.width * 10, HXP.height - 40, HXP.width * 40, 40);
+        HXP.tween(lava, {'y': HXP.height + 40}, 3, {type: TweenType.PingPong, ease: Ease.sineInOut});
+        add(lava);
     }
 
     public function onExit() {
@@ -147,7 +156,6 @@ class GameScene extends Scene
         if((inPot != null || isEvil) && player.top < 0) {
             HXP.engine.popScene();
             GameScene.bankedLevel = serializeLevels();
-            trace(GameScene.bankedLevel);
             if(player.carriedItem != null) {
                 GameScene.bankedItem = player.carriedItem.serialize();
             }

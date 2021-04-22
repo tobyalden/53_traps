@@ -159,7 +159,7 @@ class Player extends MiniEntity
                                 HXP.engine.pushScene(new GameScene(lastPot, true));
                             }
                             else if(gameScene.isEvil && gameScene.inPot != null) {
-                                // if you're in evil world and in pot ???
+                                // if you're in evil world and in pot go to final boss
                             }
                             if(carriedItem != null) {
                                 GameScene.bankedItem = carriedItem.serialize();
