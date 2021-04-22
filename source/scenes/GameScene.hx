@@ -37,6 +37,7 @@ class GameScene extends Scene
 
     public var curtain(default, null):Curtain;
     public var openSpots(default, null):Map<String, Array<TileCoordinates>>;
+    public var inPot(default, null):Pot;
     private var startMapBlueprint:Grid;
     private var hallwayMapBlueprint:Grid;
     private var endMapBlueprint:Grid;
@@ -45,7 +46,6 @@ class GameScene extends Scene
     private var allLevels:Array<Level>;
     private var player:Player;
     private var pauseTimer:Alarm;
-    private var inPot:Pot;
     private var isEvil:Bool;
 
     public function new(inPot:Pot = null, isEvil:Bool = false) {
