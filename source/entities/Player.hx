@@ -23,7 +23,7 @@ class Player extends MiniEntity
     public static inline var MAX_AIR_SPEED = 160;
     public static inline var GRAVITY = 500;
     public static inline var THROW_POWER = 100;
-    public static inline var JUMP_POWER = 160;
+    public static inline var JUMP_POWER = 160; // Maybe increase by 2-5
     public static inline var CROUCH_JUMP_POWER = 120;
     public static inline var JUMP_CANCEL_POWER = 40;
     public static inline var MAX_FALL_SPEED = 270;
@@ -185,7 +185,7 @@ class Player extends MiniEntity
 
     private function collisions() {
         if(collide("lava", x, y) != null) {
-            die();
+            takeHit();
         }
         else if(collide("hazard", x, y) != null) {
             takeHit();

@@ -55,7 +55,7 @@ class GameScene extends Scene
     }
 
     override public function begin() {
-        Random.randomSeed = MainMenu.metaSeed + floorNumber;
+        //Random.randomSeed = MainMenu.metaSeed + floorNumber;
         curtain = add(new Curtain());
         loadMaps(0);
         placeLevels();
@@ -424,7 +424,7 @@ class GameScene extends Scene
                 "spikeball", "icicle", "ice", "medusa", "ballspewer",
                 "spiketrap", "spiketurtle", "jumper"
             );
-            //enemy = HXP.choose("jumper");
+            //enemy = HXP.choose("icicle");
             if(enemy == "spikeball") {
                 var trap = new SpikeBall(new Vector2(
                     openSpot.level.x + openSpot.tileX * Level.TILE_SIZE + Level.TILE_SIZE / 2,

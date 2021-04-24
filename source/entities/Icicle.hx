@@ -17,6 +17,7 @@ class Icicle extends MiniEntity
     private var sprite:Image;
     private var velocity:Vector2;
     private var isFalling:Bool;
+    private var isFallingUpwards:Bool;
     private var vanishTimer:Alarm;
 
     public function new(x:Float, y:Float) {
@@ -27,6 +28,7 @@ class Icicle extends MiniEntity
         velocity = new Vector2();
         mask = new Hitbox(10, 10);
         isFalling = false;
+        isFallingUpwards = false;
         vanishTimer = new Alarm(VANISH_TIME, function() {
             scene.remove(this);
         });
@@ -35,21 +37,50 @@ class Icicle extends MiniEntity
 
     override public function update() {
         var player = scene.getInstance("player");
-        if(
-            Math.abs(centerX - player.centerX) < FALL_RANGE
-            && scene.collideLine(
-                "walls",
-                Std.int(centerX), Std.int(centerY),
-                Std.int(player.centerX), Std.int(player.centerY)
-            ) == null
-        ) {
-            isFalling = true;
+        if(cast(scene, GameScene).isEvil) {
+            if(
+                Math.abs(centerX - player.centerX) < FALL_RANGE
+                && (scene.collideLine(
+                    "walls",
+                    Std.int(centerX), Std.int(centerY),
+                    Std.int(player.centerX), Std.int(player.centerY)
+                ) == null || (cast(scene, GameScene).isEvil && centerY > player.centerY))
+            ) {
+                if(!isFalling && centerY > player.centerY) {
+                    isFallingUpwards = true;
+                }
+                isFalling = true;
+            }
+        }
+        else {
+            if(
+                Math.abs(centerX - player.centerX) < FALL_RANGE
+                && scene.collideLine(
+                    "walls",
+                    Std.int(centerX), Std.int(centerY),
+                    Std.int(player.centerX), Std.int(player.centerY)
+                ) == null
+            ) {
+                isFalling = true;
+            }
         }
         if(isFalling) {
-            velocity.y += Player.GRAVITY * HXP.elapsed;
-            velocity.y = Math.min(velocity.y, Player.MAX_FALL_SPEED);
+            if(isFallingUpwards) {
+                velocity.y -= Player.GRAVITY * HXP.elapsed;
+            }
+            else {
+                velocity.y += Player.GRAVITY * HXP.elapsed;
+            }
+            velocity.y = MathUtil.clamp(
+                velocity.y, -Player.MAX_FALL_SPEED, Player.MAX_FALL_SPEED
+            );
         }
-        moveBy(velocity.x * HXP.elapsed, velocity.y * HXP.elapsed, "walls");
+        if(isFallingUpwards) {
+            moveBy(velocity.x * HXP.elapsed, velocity.y * HXP.elapsed);
+        }
+        else {
+            moveBy(velocity.x * HXP.elapsed, velocity.y * HXP.elapsed, "walls");
+        }
         super.update();
     }
 
