@@ -107,6 +107,7 @@ class Player extends MiniEntity
                     canMove = true;
                     collidable = true;
                 }});
+                lastPot.shatter();
                 lastPot = null;
             }
             else if(GameScene.bankedItem != null) {
@@ -140,11 +141,12 @@ class Player extends MiniEntity
             if(Main.inputPressed("down")) {
                 var item = collide("item", x, y + 1);
                 if(item != null) {
-                    if(item.name == "pot") {
+                    if(item.name == "pot" && !cast(item, Pot).isShattered) {
+                        var pot = cast(item, Pot);
                         canMove = false;
                         collidable = false;
-                        HXP.tween(this, {"x": item.centerX - width / 2, "y": item.bottom - height}, 1, {complete: function() {
-                            lastPot = cast(item, Pot);
+                        HXP.tween(this, {"x": pot.centerX - width / 2, "y": pot.bottom - height}, 1, {complete: function() {
+                            lastPot = pot;
                             var gameScene = cast(scene, GameScene);
                             if(!gameScene.isEvil && gameScene.inPot == null) {
                                 // if you're in normal world and not in pot - go to normal pot
@@ -182,7 +184,10 @@ class Player extends MiniEntity
     }
 
     private function collisions() {
-        if(collide("hazard", x, y) != null) {
+        if(collide("lava", x, y) != null) {
+            die();
+        }
+        else if(collide("hazard", x, y) != null) {
             takeHit();
         }
         if(collide("exit", x, y) != null) {

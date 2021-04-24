@@ -15,7 +15,7 @@ class Item extends MiniEntity
 {
     //public static inline var SPEED = 100;
 
-    private var sprite:Image;
+    private var sprite:Spritemap;
     private var velocity:Vector2;
     private var carrier:MiniEntity;
 
@@ -40,7 +40,7 @@ class Item extends MiniEntity
         super(x, y);
         type = "item";
         name = "item";
-        sprite = new Image("graphics/item.png");
+        sprite = new Spritemap("graphics/item.png");
         graphic = sprite;
         velocity = new Vector2();
         mask = new Hitbox(15, 15);
