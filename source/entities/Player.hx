@@ -120,10 +120,11 @@ class Player extends MiniEntity
                 movement();
             }
             if(carriedItem != null) {
-                carriedItem.moveTo(Math.floor(centerX - carriedItem.width / 2), Math.floor(y - carriedItem.height));
+                carriedItem.moveTo(Math.floor(centerX - carriedItem.width / 2), Math.floor(y - carriedItem.height), ["walls"]);
             }
             if(Main.inputPressed("action")) {
                 if(carriedItem != null) {
+                    // Throw item
                     carriedItem.setCarrier(null);
                     var throwVelocity = new Vector2(sprite.flipX ? -THROW_POWER : THROW_POWER, -THROW_POWER);
                     throwVelocity.add(velocity);
@@ -131,6 +132,7 @@ class Player extends MiniEntity
                     carriedItem = null;
                 }
                 else {
+                    // Pick up item
                     var item = collide("item", x, y + 1);
                     if(item != null) {
                         carriedItem = cast(item, Item);
