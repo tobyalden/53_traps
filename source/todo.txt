@@ -1,0 +1,1 @@
+- add item's hitbox to players when you're carrying something
