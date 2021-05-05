@@ -137,6 +137,7 @@ class Player extends MiniEntity
                     if(item != null) {
                         carriedItem = cast(item, Item);
                         carriedItem.setCarrier(this);
+                        y += carriedItem.height;
                     }
                 }
             }
