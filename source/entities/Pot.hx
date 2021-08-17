@@ -17,12 +17,12 @@ class Pot extends Item
         super(x, y);
         name = "pot";
         layer = -20;
-        sprite = new Spritemap("graphics/pot.png", 15, 25);
+        sprite = new Spritemap("graphics/pot.png", 15, 20);
         sprite.add("idle", [0]);
         sprite.add("shattered", [1]);
         sprite.play("idle");
         graphic = sprite;
-        mask = new Hitbox(15, 25);
+        mask = new Hitbox(15, 20);
     }
 
     public function shatter() {
