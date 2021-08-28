@@ -64,7 +64,7 @@ class Item extends MiniEntity
                 velocity.y += Player.GRAVITY * HXP.elapsed;
             }
             velocity.y = Math.min(velocity.y, Player.MAX_FALL_SPEED);
-            moveBy(velocity.x * HXP.elapsed, velocity.y * HXP.elapsed, "walls");
+            moveBy(velocity.x * HXP.elapsed, velocity.y * HXP.elapsed, ["walls", "item", "player"]);
         }
         super.update();
     }

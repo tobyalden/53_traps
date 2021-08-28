@@ -3,6 +3,7 @@
   <height>180</height>
   <walls>
     <rect x="0" y="0" w="10" h="180"/>
+    <rect x="10" y="60" w="20" h="30"/>
     <rect x="10" y="110" w="310" h="70"/>
   </walls>
   <objects>

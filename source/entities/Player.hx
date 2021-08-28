@@ -120,7 +120,11 @@ class Player extends MiniEntity
                 movement();
             }
             if(carriedItem != null) {
-                carriedItem.moveTo(Math.floor(centerX - carriedItem.width / 2), Math.floor(y - carriedItem.height), ["walls"]);
+                carriedItem.moveTo(
+                    getCarriedItemTargetLocation(carriedItem).x,
+                    getCarriedItemTargetLocation(carriedItem).y,
+                    ["walls", "item"]
+                );
             }
             if(Main.inputPressed("action")) {
                 if(carriedItem != null) {
@@ -133,11 +137,21 @@ class Player extends MiniEntity
                 }
                 else {
                     // Pick up item
-                    var item = collide("item", x, y + 1);
-                    if(item != null) {
-                        carriedItem = cast(item, Item);
-                        carriedItem.setCarrier(this);
-                        y += carriedItem.height;
+                    var _item = collide("item", x, y + 1);
+                    if(_item != null) {
+                        var item = cast(_item, Item);
+                        //if(
+                            //item.collideMultiple(
+                                //["walls", "item"],
+                                //getCarriedItemTargetLocation(item).x,
+                                //getCarriedItemTargetLocation(item).y
+                            //) == null
+                        //) {
+                            carriedItem = cast(item, Item);
+                            carriedItem.setCarrier(this);
+                            x = carriedItem.centerX - width / 2;
+                            y += carriedItem.height;
+                        //}
                     }
                 }
             }
@@ -184,6 +198,13 @@ class Player extends MiniEntity
         }
         super.update();
         wasCrouching = isCrouching;
+    }
+
+    private function getCarriedItemTargetLocation(item:Item) {
+        return new Vector2(
+            Math.floor(centerX - item.width / 2),
+            Math.floor(y - item.height)
+        );
     }
 
     private function collisions() {

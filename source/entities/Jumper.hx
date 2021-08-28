@@ -63,7 +63,7 @@ class Jumper extends MiniEntity
                 velocity.y += GRAVITY * HXP.elapsed;
                 velocity.y = Math.min(velocity.y, Player.MAX_FALL_SPEED);
             }
-            moveBy(velocity.x * HXP.elapsed, velocity.y * HXP.elapsed, "walls");
+            moveBy(velocity.x * HXP.elapsed, velocity.y * HXP.elapsed, ["walls", "item"]);
         }
         sprite.play(jumpTimer.active && jumpTimer.percent >= 0.5 ? "prejump" : "idle");
         super.update();
